@@ -1,0 +1,72 @@
+//
+   Created by wangyc on 15-2-23.
+
+extends layout
+
+block content
+  div.ui.segment
+    a.ui.tag.label iPhone6
+    a.ui.tag.label 雾霾
+    a.ui.tag.label 星际穿越
+    a.ui.tag.label 冰雪奇缘
+    a.ui.tag.label 爸爸去哪儿
+    a.ui.tag.label 奔跑吧兄弟
+    a.ui.tag.label 马云
+    a.ui.tag.label 双十一
+    a.ui.tag.label 都教授
+    a.ui.tag.label 小龙女
+    a.ui.tag.label 结婚
+    div.ui.right.labeled.icon.red.button
+      i.sign.out.icon
+      label Sign out
+
+  div.ui.page.grid
+    div.row
+      div.wide.column
+        div.ui.card(style={float: left})
+          div.content
+            div#username.header #{username}
+            div.ui.divided.list
+              div.item
+                div#labelCount.right.floated.compact.ui.label 102
+                i.large.write.icon
+                div.content
+                  b Label
+              div.item
+                div#validateCount.right.floated.compact.ui.orange.label 92
+                i.large.check.circle.icon
+                div.content
+                  b Check
+
+        div.ui.threaded.comments
+          h3.ui.dividing.header 关键词：#{keyword}
+          each row in rows
+            div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
+              div.content
+                a.author= row['username']
+                if row['text']
+                  div.text= row['text']
+                else
+                  div.text= '转发微博'
+                div.ui.form
+                  div.grouped.inline.fields
+                    div.field
+                      div.ui.radio.checkbox
+                        input(type="radio", name="positive")
+                        label +1
+                    div.field
+                      div.ui.radio.checkbox
+                        input(type="radio", name="neutral")
+                        label 0
+                    div.field
+                      div.ui.radio.checkbox
+                        input(type="radio", name="negative")
+                        label -1
+          div.ui.divider
+            div.row
+              div.ui.labeled.icon.green.button
+                i.cloud.upload.icon
+                label Submit
+              div.ui.right.labeled.icon.blue.button
+                i.right.arrow.icon
+                label Next

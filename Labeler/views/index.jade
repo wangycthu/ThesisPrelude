@@ -1,5 +1,52 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div.ui.page.grid
+    div.column
+    h1= title
+    div#login.ui.form.segment
+      h4.ui.dividing.header 登录
+      a(href='#', onclick='showregister()', style={float: 'right'}) 快速注册
+      div.two.fields
+        div.field
+          label 用户名
+        div.ui.icon.input
+          input(placeholder='username', name='username', type='text')
+          i.user.icon
+        br
+        br
+        div.field
+          label 密码
+        div.ui.icon.input
+          input(type='password', name='password')
+          i.lock.icon
+        br
+        br
+        div.ui.blue.fluid.submit.button 登录
+
+    div#register.ui.form.segment(style={display: 'none'})
+      h4.ui.dividing.header 注册
+      a(href='#', onclick='showlogin()', style={float: 'right'}) 直接登录
+      div.two.fields
+        div.required.field
+          label 用户名
+        div.ui.icon.input
+          input(type='text')
+          i.user.icon
+        br
+        br
+        div.required.field
+          label 密码
+        div.ui.icon.input
+          input(type='password')
+          i.lock.icon
+        br
+        br
+        div.required.field
+          label 重复密码
+        div.ui.icon.input
+          input(type='password')
+          i.lock.icon
+        br
+        br
+        div.ui.green.fluid.submit.button 注册
