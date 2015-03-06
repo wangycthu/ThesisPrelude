@@ -48,10 +48,9 @@ function User(_username, _password, isSuper) {
           if (rows.length) {
             callback(0, 'username has been registered.');
           } else {
-            console.log(this);
             conn.query(
                 'insert into UserInfo values(\'' + that.username + '\', ' + '\'' +
-                that.password + '\', default)',
+                that.password + '\', default, default, default)',
                 function (err, res) {
                   if (err) {
                     callback(0, "save user error.");

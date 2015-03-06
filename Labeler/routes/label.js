@@ -17,7 +17,7 @@ var conn = mysql.createConnection({
 
 var keywordList = {
   'iPhone6': 'iPhone6', 'MaYun': '马云',
-  'Marriage': '结婚', 'InterStellar': '星际穿越',
+  'Marriage': '结婚', 'Interstellar': '星际穿越',
   'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一',
   'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘',
   'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾',
@@ -30,23 +30,23 @@ router.get('/', function (req, res, next) {
   if (_keyword == null) {
     _keyword = 'iPhone6'
   }
-  var _query = 'select distinct id from ' + _keyword +
-      ' where (label1 is NULL) or (user1 != \'' + _username +
-      '\' and label2 is NULL) limit 1';
+  var _query = 'select id from ' + _keyword +
+      ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
+      '\' and label2 is NULL)) and (username != \'USERNAME\') limit 1';
   conn.query(_query, function (err, rows, fields) {
     if (err) {
       console.log(err);
     } else {
       if (rows.length) {
         var _id = rows[0]['id'];
-        conn.query('select * from ' + _keyword +
-            ' where id=' + _id,
+        conn.query('select * from ' + _keyword + ' where id=' + _id,
             function (err, _rows, fields) {
               if (err) {
                 console.log(err);
               } else {
                 res.render('label', {
-                  keyword: keywordList[_keyword],
+                  title: '微博标注平台',
+                  keyword: _keyword,
                   username: _username,
                   rows: _rows
                 });
@@ -63,8 +63,9 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res) {
   var _id = req.body.id;
   var _keyword = req.body.keyword;
+  var username = req.body.username;
   var labels = req.body.labels;
-  var thread = new Thread(_id, _keyword, labels);
+  var thread = new Thread(_id, _keyword, username, labels);
   thread.save(function (status, msg) {
     res.json({'status': status, 'msg': msg})
   });

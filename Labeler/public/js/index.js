@@ -72,6 +72,7 @@ validateForm.ready = function () {
                   //$.cookie("userId", result.msg._id);
                   $.cookie("username", username);
                   $.cookie("isSuper", result.msg['isSuper']);
+                  $.cookie("keyword", "iPhone6");
 
                   window.location = $(location)[0].origin + "/label";
                 }
@@ -90,6 +91,7 @@ validateForm.ready = function () {
                   //$.cookie("userId", result.msg._id);
                   $.cookie("username", username);
                   $.cookie("isSuper", result.msg.isSuper);
+                  $.cookie("keyword", "iPhone6");
 
                   window.location = $(location)[0].origin + "/label";
                 }
