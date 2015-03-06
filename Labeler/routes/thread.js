@@ -15,7 +15,7 @@ function Thread(_id, _keyword, _username, _labels) {
   this.id = _id;
   this.keyword = _keyword;
   this.username = _username;
-  this.labels = _labels; //Array
+  this.labels = JSON.parse(_labels); //Array
   this.save = function (callback) {
     var that = this;
     conn.query(
@@ -30,10 +30,10 @@ function Thread(_id, _keyword, _username, _labels) {
           if (row['label1'] && row['user1'] != that.username) {
             order = '2';
           }
-          console.log(that.labels);
-          for (var record in that.labels) {
+
+          for (var number in that.labels) {
             var label = null;
-            switch (record['label']) {
+            switch (that.labels[number]) {
               case 'positive':
                 label = 1;
                 break;
@@ -49,22 +49,21 @@ function Thread(_id, _keyword, _username, _labels) {
             conn.query(
                 'update ' + that.keyword + ' set label' + order + '=' + label
                 + ', user' + order + '=\'' + that.username + '\' where id=' +
-                that.id + ' and number=' + record['number'],
+                that.id + ' and number=' + number,
                 function (err, res) {
                   if (err) {
                     callback(0, "Update table " + that.keyword + " error.");
                   }
-                  conn.query(
-                      'update UserInfo set labelCount=labelCount+1 where username=' + that.username,
-                      function (err, res) {
-                        if (err) {
-                          callback(0, "Update UserInfo failed.");
-                        }
-                        callback(1, that);
-                      }
-                  );
-                });
+            });
           }
+          conn.query(
+              'update UserInfo set labelCount=labelCount+1 where username=\'' + that.username + '\'',
+              function (err, res) {
+                if (err) {
+                  callback(0, "Update UserInfo failed.");
+                }
+                callback(1, null);
+          });
         });
   }
 }

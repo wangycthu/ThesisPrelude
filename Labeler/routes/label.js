@@ -30,6 +30,21 @@ router.get('/', function (req, res, next) {
   if (_keyword == null) {
     _keyword = 'iPhone6'
   }
+  var _labelCount = null;
+  var _validateCount = null;
+
+  conn.query(
+      'select * from UserInfo where username=\'' + _username + '\'',
+      function(err, rows, fields) {
+        if (err) {
+          console.log(err);
+        } else {
+          _labelCount = rows[0]['labelCount'];
+          _validateCount = rows[0]['validateCount'];
+        }
+      }
+  );
+
   var _query = 'select id from ' + _keyword +
       ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
       '\' and label2 is NULL)) and (username != \'USERNAME\') limit 1';
@@ -48,7 +63,9 @@ router.get('/', function (req, res, next) {
                   title: '微博标注平台',
                   keyword: _keyword,
                   username: _username,
-                  rows: _rows
+                  rows: _rows,
+                  labelCount: _labelCount,
+                  validateCount: _validateCount
                 });
               }
             }
@@ -65,6 +82,7 @@ router.post('/', function (req, res) {
   var _keyword = req.body.keyword;
   var username = req.body.username;
   var labels = req.body.labels;
+  console.log(req.body);
   var thread = new Thread(_id, _keyword, username, labels);
   thread.save(function (status, msg) {
     res.json({'status': status, 'msg': msg})
