@@ -27,32 +27,30 @@ validateForm.ready = function () {
       .popup()
   ;
 
-
   $('.ui.form')
       .form({
         username: {
-          identifier: 'username',
+          identifier : 'username',
           rules: [
             {
-              type: 'empty',
-              prompt: 'Please enter a username'
+              type   : 'empty',
+              prompt : 'Please enter a username'
             }
           ]
         },
         password: {
-          identifier: 'password',
+          identifier : 'password',
           rules: [
             {
-              type: 'empty',
-              prompt: 'Please enter a password'
+              type   : 'empty',
+              prompt : 'Please enter a password'
             },
             {
-              type: 'length[2]',
-              prompt: 'Your password must be at least 2 characters'
+              type   : 'length[3]',
+              prompt : 'Your password must be at least 3 characters'
             }
           ]
         }
-
       },
       {
         onSuccess: function (event) {
@@ -73,8 +71,11 @@ validateForm.ready = function () {
                   $.cookie("username", username);
                   $.cookie("isSuper", result.msg['isSuper']);
                   $.cookie("keyword", "iPhone6");
-
-                  window.location = $(location)[0].origin + "/label";
+                  if (result.msg['isSuper']) {
+                    window.location = $(location)[0].origin + "/overview";
+                  } else {
+                    window.location = $(location)[0].origin + "/label";
+                  }
                 }
               },
               dataType: 'json'

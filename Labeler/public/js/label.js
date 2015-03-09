@@ -26,9 +26,11 @@ function submit() {
       } else {
         alert('标注成功！');
         $('.ui.radio.checkbox').checkbox('disable');
-        var labelCount = $('#labelCount').val();
-        console.log(labelCount);
-        $('#labelCount').val(labelCount + 1);
+        $('#next').removeClass('disabled');
+        $('#submit').addClass('disabled');
+        $('#trash').addClass('disabled');
+        var labelCount = parseInt($('#labelCount').text());
+        $('#labelCount').text(labelCount + 1);
       }
     }
   });
@@ -42,10 +44,17 @@ $(function () {
       if (val == null) {
         alert('请不要漏标哦~');
         complete = false;
+        return false;
       }
     });
     if (complete) {
       submit();
     }
   });
-})
+});
+
+$(function () {
+  $('#next').click(function () {
+    window.location.reload();
+  })
+});

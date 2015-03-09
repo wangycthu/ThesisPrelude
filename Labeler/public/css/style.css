@@ -1,0 +1,63 @@
+h1{
+    margin-top: 120px;
+    text-align: center;
+}
+
+h6{
+    text-align: center;
+}
+code {
+    background-color: rgba(0, 0, 0, 0.02);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-family: "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0 2px 0px 0px;
+    padding: 2px 4px;
+    vertical-align: baseline;
+}
+
+#login{
+    width: 400px;
+    margin: 1rem auto;
+}
+
+#register{
+    width: 400px;
+    margin: 1rem auto;
+}
+
+
+.ui.card>.content>.header:not(.ui), .ui.cards>.card>.content>.header:not(.ui){
+    font-size: 28px;
+}
+
+.ui.list>.item .header{
+    font-size: 22px;
+}
+
+.ui.list> .item .description{
+    margin-top: 10px;
+}
+
+#mainpic{
+    display: block;
+    margin: 10px auto;
+}
+
+#buttons{
+    display: block;
+    margin: 10px auto;
+    width: 375px;
+}
+
+#checkbuttons{
+    display: block;
+    margin: 10px auto;
+    width: 300px;
+}
+.ui.grid>*{
+    padding-left: 0;
+    padding-right: 0;
+}
