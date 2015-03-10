@@ -1,15 +1,13 @@
 /**
  * Created by wangyc on 15-2-27.
  */
-var mysql = require('mysql');
-var conn = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '199283155wyc',
-  database: 'Microblog',
-  charset: 'UTF8MB4'
-});
+
+
+var MysqlClient = require("../models/mysql");
+var conn = MysqlClient.createConnection();
+
+console.log("in thread.js: conn");
+console.log(conn);
 
 function Thread(_id, _keyword, _username, _labels) {
   this.id = _id;
@@ -37,7 +35,7 @@ function Thread(_id, _keyword, _username, _labels) {
               case 'positive':
                 label = 1;
                 break;
-              case 'neutral':
+            case 'neutral':
                 label = 0;
                 break;
               case 'negative':

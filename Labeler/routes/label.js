@@ -6,6 +6,7 @@ var router = express.Router();
 var Thread = require('./thread');
 
 var mysql = require('mysql');
+/**
 var conn = mysql.createConnection({
   host: 'localhost',
   port: 3306,
@@ -14,6 +15,9 @@ var conn = mysql.createConnection({
   database: 'Microblog',
   charset: 'UTF8MB4'
 });
+ **/
+var MysqlClient = require("../models/mysql");
+var conn = MysqlClient.createConnection();
 
 var keywordList = {
   'iPhone6': 'iPhone6', 'MaYun': '马云',
