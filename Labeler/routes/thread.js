@@ -35,7 +35,7 @@ function Thread(_id, _keyword, _username, _labels) {
               case 'positive':
                 label = 1;
                 break;
-            case 'neutral':
+              case 'neutral':
                 label = 0;
                 break;
               case 'negative':
