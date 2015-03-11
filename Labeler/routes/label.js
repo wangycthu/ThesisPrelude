@@ -84,13 +84,20 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res) {
   var _id = req.body.id;
   var _keyword = req.body.keyword;
-  var username = req.body.username;
-  var labels = req.body.labels;
-  console.log(req.body);
-  var thread = new Thread(_id, _keyword, username, labels);
-  thread.save(function (status, msg) {
-    res.json({'status': status, 'msg': msg})
-  });
+  var _trash = req.body.trash;
+  if (_trash == 0) {
+    var _username = req.body.username;
+    var _labels = req.body.labels;
+    var thread = new Thread(_id, _keyword, _username, _labels);
+    thread.save(function (status, msg) {
+      res.json({'status': status, 'msg': msg})
+    });
+  } else {
+    var thread = new Thread(_id, _keyword);
+    thread.trash(function (status, msg) {
+      res.json({'status': status, 'msg': msg})
+    });
+  }
 });
 
 module.exports = router;

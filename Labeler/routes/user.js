@@ -2,19 +2,6 @@
  * Created by wangyc on 15-2-26.
  */
 
-/**
-var mysql = require('mysql');
-var conn = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '199283155wyc',
-  database: 'Microblog',
-  charset: 'UTF8MB4'
-});
-**/
-
-
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 

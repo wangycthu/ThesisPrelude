@@ -19,7 +19,7 @@ function submit() {
     url: '/label',
     type: 'POST',
     dataType: 'json',
-    data: {'id': threadID, 'keyword': _keyword, 'username': _username, 'labels': _labels},
+    data: {'id': threadID, 'keyword': _keyword, 'username': _username, 'labels': _labels, 'trash': 0},
     success: function (result) {
       if (result.status == 0) {
         alert(result.msg);
@@ -58,3 +58,33 @@ $(function () {
     window.location.reload();
   })
 });
+
+function trash() {
+  var threadID = $('.ui.threaded.comments').attr('id');
+  var _keyword = $.cookie('keyword');
+
+  $.ajax({
+    url: '/label',
+    type: 'POST',
+    dataType: 'json',
+    data: {'id': threadID, 'keyword': _keyword, 'trash': 1},
+    success: function (result) {
+      if (result.status == 0) {
+        alert(result.msg);
+      } else {
+        $('.ui.radio.checkbox').checkbox('disable');
+        $('#next').removeClass('disabled');
+        $('#submit').addClass('disabled');
+        $('#trash').addClass('disabled');
+      }
+    }
+  });
+}
+
+function confirm_trash()
+{
+  var r = confirm("你确定该数据无法标注？");
+  if (r == true) {
+    trash()
+  }
+}
