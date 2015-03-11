@@ -1,0 +1,12 @@
+module.exports = {
+
+    mysql_connect : {
+        // mysql setting
+        host: "xxxxx",
+        port: 3306,
+        user: "xxxxx",
+        password: "xxxx",
+        database: "xxxx",
+        charset: "xxxxx"
+    }
+};

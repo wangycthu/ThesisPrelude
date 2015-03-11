@@ -1,6 +1,8 @@
 /**
  * Created by wangyc on 15-2-26.
  */
+
+/**
 var mysql = require('mysql');
 var conn = mysql.createConnection({
   host: 'localhost',
@@ -10,6 +12,11 @@ var conn = mysql.createConnection({
   database: 'Microblog',
   charset: 'UTF8MB4'
 });
+**/
+
+
+var MysqlClient = require("../models/mysql");
+var conn = MysqlClient.createConnection();
 
 function User(_username, _password, isSuper) {
   this.username = _username;
@@ -21,17 +28,19 @@ function User(_username, _password, isSuper) {
     conn.query(
         'select * from UserInfo where username=\'' + that.username + '\' limit 1',
         function (err, rows, fields) {
+
           if (err) {
-            callback(0, err);
+              console.log("ERR: " + err);
+              callback(0, err);
           }
-          if (rows.length) {
+          else if (rows.length) {
             if (rows[0]['password'] === that.password) {
               callback(1, rows[0]);
             } else {
               callback(0, 'password error.');
             }
           } else {
-            callback(0, 'user doesn\'t exist.')
+            callback(0, 'user doesn\'t exist.');
           }
         }
     );
