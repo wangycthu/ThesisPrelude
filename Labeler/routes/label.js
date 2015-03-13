@@ -31,6 +31,7 @@ var keywordList = {
 router.get('/', function (req, res, next) {
   var _username = req.cookies.username;
   var _keyword = req.query.kw;
+  // default select
   if (_keyword == null) {
     _keyword = 'iPhone6'
   }

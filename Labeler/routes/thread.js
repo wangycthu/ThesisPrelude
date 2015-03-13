@@ -6,9 +6,6 @@
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 
-console.log("in thread.js: conn");
-console.log(conn);
-
 function Thread(_id, _keyword, _username, _labels) {
   this.id = _id;
   this.keyword = _keyword;
