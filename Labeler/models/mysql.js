@@ -100,7 +100,7 @@ var MysqlClient = (function() {
     // has labeled
     that.getCountofSamplesByLabeled = function(keyword, callback) {
 
-        var _query = "SELECT COUNT(id) FROM ? "
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
                 + " WHERE ( parent = 0 AND (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
                 + " AND (label1 <> label2))";
         conn.query(_query, [keyword] ,function(err, rows, fields){
@@ -109,14 +109,15 @@ var MysqlClient = (function() {
                 console.log("ERROR: getCountofSamplesByLabeled");
                 callback(1, "DB error");
             } else callback(0, rows[0]);
+
         });
     };
 
     that.getCountofSamplesByConflict = function(keyword, callback) {
 
-        var _query = "SELECT COUNT(id) FROM ? "
-                + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL)) "
-                + " AND (label1 == label2 ))";
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL) "
+                + " AND (label1 = label2 ))";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
                 console.log("ERROR: getCountofSamplesByConflict");
@@ -127,8 +128,8 @@ var MysqlClient = (function() {
 
     that.getCountofSamplesByUnlabeled = function(keyword, callback) {
 
-        var _query = "SELECT COUNT(id) FROM ? "
-                + " WHERE ((label1 IS NULL) or (label2 IS NULL))";
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 IS NULL) OR (label2 IS NULL))";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
                 console.log("ERROR: getCountofSamplesByUnlabeled");
@@ -138,8 +139,8 @@ var MysqlClient = (function() {
     };
 
     that.getCountofSamplesByTrash = function(keyword, callback) {
-        var _query = "SELECT COUNT(id) FROM ? "
-                + " WHERE ((label1 == 2) OR (label2 == 2))";
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 = 2) OR (label2 = 2))";
 
         conn.query(_query, [keyword], function(err, rows, fields) {
             if(err) {
