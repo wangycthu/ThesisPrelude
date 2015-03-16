@@ -56,6 +56,7 @@ $(function () {
 
           window.location = $(location)[0].origin + "/stats";
       }
+
   });
 });
 

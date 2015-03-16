@@ -101,7 +101,7 @@ var MysqlClient = (function() {
     that.getCountofSamplesByLabeled = function(keyword, callback) {
 
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
-                + " WHERE ( parent = 0 AND (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
+                + " WHERE (  (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
                 + " AND (label1 <> label2))";
         conn.query(_query, [keyword] ,function(err, rows, fields){
 
@@ -116,7 +116,7 @@ var MysqlClient = (function() {
     that.getCountofSamplesByConflict = function(keyword, callback) {
 
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
-                + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL) "
+                + " WHERE ( (label1 IS NOT NULL) AND (label2 IS NOT NULL) "
                 + " AND (label1 = label2 ))";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
@@ -129,7 +129,7 @@ var MysqlClient = (function() {
     that.getCountofSamplesByUnlabeled = function(keyword, callback) {
 
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
-                + " WHERE ((label1 IS NULL) OR (label2 IS NULL))";
+                + " WHERE ( (label1 IS NULL) OR (label2 IS NULL))";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
                 console.log("ERROR: getCountofSamplesByUnlabeled");
@@ -140,7 +140,7 @@ var MysqlClient = (function() {
 
     that.getCountofSamplesByTrash = function(keyword, callback) {
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
-                + " WHERE ((label1 = 2) OR (label2 = 2))";
+                + " WHERE ( parent = 0 AND ((label1 = 2) OR (label2 = 2)))";
 
         conn.query(_query, [keyword], function(err, rows, fields) {
             if(err) {
