@@ -22,6 +22,9 @@ html
         div.ui.right.labeled.icon.red.button
           i.sign.out.icon
           label Sign out
+        i#manage.ui.primary.button
+          label Manage
+          
         script.
           $(document).ready(function () {
             $('.ui.tag.label').click(function () {
@@ -33,6 +36,11 @@ html
               $.cookie('isSuper', null);
               window.location = $(location)[0].origin;
             })
+            
+            if ($.cookie('isSuper') == 0 ) {
+               $("#manage").remove();
+            };
+            
           })
 
       div.ui.page.grid

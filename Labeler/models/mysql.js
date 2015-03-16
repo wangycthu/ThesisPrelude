@@ -15,8 +15,19 @@ var conn = mysql.createConnection({
 
 var MysqlClient = (function() {
 
+
     var that = this;
+    that.conn = null;
     that.pool = null;
+    that.keywordList = {
+        'iPhone6': 'iPhone6', 'MaYun': '马云',
+        'Marriage': '结婚', 'Interstellar': '星际穿越',
+        'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一',
+        'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘',
+        'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾',
+        'XiaoLongNv': '小龙女'
+    };
+
     that.createConnection = function () {
 
         var conn = mysql.createConnection({
@@ -27,7 +38,8 @@ var MysqlClient = (function() {
             database: config.mysql_connect.database,
             charset: config.mysql_connect.charset
         });
-        return conn;
+        that.conn = conn;
+        return that.conn;
     };
 
     that.createPool = function () {
@@ -51,8 +63,115 @@ var MysqlClient = (function() {
         return conn;
     };
 
+    // DB operator
+    that.getUserInfo = function(username, password, callback) {
+
+        var _query = "SELECT * FROM UserInfo  WHERE username = ? "
+                + " AND password = ? limit 1";
+        that.conn.query(_query, [username, password], function(err, rows, fields) {
+            if(err) {
+                console.log("err: " + err);
+                callback(1, "db error");
+            } else if(rows.length == 1){
+                console.log(rows);
+                callback(0, rows[0]);
+            } else {
+                console.log("err: " + "no user");
+                callback(2, "no user");
+            }
+        });
+    };
+
+    that.insertUser = function (user) {
+
+        var _query = "INSERT INTO UserInfo "
+                + " values(?, ?, ?, default, default, defualt)";
+
+        conn.query( _query, [user.username, user.password, user.isSuper],
+                    function(err, res) {
+                        if(err) {
+                            console.log("ERROR: insert into UserInfo error!");
+                            callback(0, "save user error.");
+                        }
+                        callback(1, that);
+                    });
+    };
+
+    // has labeled
+    that.getCountofSamplesByLabeled = function(keyword, callback) {
+
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ( parent = 0 AND (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
+                + " AND (label1 <> label2))";
+        conn.query(_query, [keyword] ,function(err, rows, fields){
+
+            if(err) {
+                console.log("ERROR: getCountofSamplesByLabeled");
+                callback(1, "DB error");
+            } else callback(0, rows[0]);
+
+        });
+    };
+
+    that.getCountofSamplesByConflict = function(keyword, callback) {
+
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL) "
+                + " AND (label1 = label2 ))";
+        conn.query(_query, [keyword], function(err, rows, fields){
+            if(err) {
+                console.log("ERROR: getCountofSamplesByConflict");
+                callback(1, "DB error");
+            } else callback(0, rows[0]);
+        });
+    };
+
+    that.getCountofSamplesByUnlabeled = function(keyword, callback) {
+
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 IS NULL) OR (label2 IS NULL))";
+        conn.query(_query, [keyword], function(err, rows, fields){
+            if(err) {
+                console.log("ERROR: getCountofSamplesByUnlabeled");
+                callback(1, "DB error");
+            } else {console.log(rows);callback(0, rows[0]);}
+        });
+    };
+
+    that.getCountofSamplesByTrash = function(keyword, callback) {
+        var _query = "SELECT COUNT(id) AS amount FROM ?? "
+                + " WHERE ((label1 = 2) OR (label2 = 2))";
+
+        conn.query(_query, [keyword], function(err, rows, fields) {
+            if(err) {
+
+                console.log("ERROR: getCountofSamplesByTrash");
+                callback(1, "DB error");
+            } else callback(0, rows[0]);
+        });
+    };
+
+    that.getSamplesByUnlabeled = function(keyword, username, callback) {
+
+        var _query = "SELECT * from ? "
+                + " WHERE ((label1 <> ?) AND (label2 <> ?) AND "
+                + " ((label1 <> NULL) OR (label2 <> NULL)))";
+        conn.query(_query, [keyword, username, username],
+                   function(err, rows, fields){
+                       if (err) {
+                           console.log("ERROR: getSamplesByUnlabeled");
+                           callback(1, "DB error");
+                       } else callback(0, rows);
+                   });
+    };
+
     return {
-        createConnection: createConnection
+        createConnection: createConnection,
+        getUserInfo: getUserInfo,
+        getCountofSamplesByLabeled: getCountofSamplesByLabeled,
+        getCountofSamplesByConflict: getCountofSamplesByConflict,
+        getCountofSamplesByUnlabeled: getCountofSamplesByUnlabeled,
+        getCountofSamplesByTrash: getCountofSamplesByTrash
     };
 })();
 
