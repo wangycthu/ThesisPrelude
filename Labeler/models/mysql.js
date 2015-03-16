@@ -72,7 +72,7 @@ var MysqlClient = (function() {
             if(err) {
                 console.log("err: " + err);
                 callback(1, "db error");
-            } else if(rows.length){
+            } else if(rows.length == 1){
                 console.log(rows);
                 callback(0, rows[0]);
             } else {
@@ -134,7 +134,7 @@ var MysqlClient = (function() {
             if(err) {
                 console.log("ERROR: getCountofSamplesByUnlabeled");
                 callback(1, "DB error");
-            } else callback(0, rows[0]);
+            } else {console.log(rows);callback(0, rows[0]);}
         });
     };
 

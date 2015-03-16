@@ -51,6 +51,12 @@ $(function () {
       submit();
     }
   });
+  $("#manage").click(function(){
+      if($.cookie("username")) {
+
+          window.location = $(location)[0].origin + "/stats";
+      }
+  });
 });
 
 $(function () {

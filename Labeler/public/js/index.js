@@ -64,7 +64,7 @@ validateForm.ready = function () {
               url: '/login',
               data: {'userName': username, 'password': password},
               success: function (result) {
-                if (result.status == 0) {
+                if (result.status != 0) {
                   alert(result.msg);
                 } else {
                   //$.cookie("userId", result.msg._id);
@@ -86,7 +86,7 @@ validateForm.ready = function () {
               url: '/register',
               data: {'userName': username, 'password': password},
               success: function (result) {
-                if (result.status == 0) {
+                if (result.status != 0) {
                   alert(result.msg);
                 } else {
                   //$.cookie("userId", result.msg._id);

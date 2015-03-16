@@ -20,7 +20,6 @@ var samples = (function(){
     that.getCountofSamplesByConflict = function(keyword, callback) {
 
         MysqlClient.getCountofSamplesByConflict(keyword, function(status, msg){
-
             callback(status, msg);
         });
     };
@@ -42,46 +41,61 @@ var samples = (function(){
     that.getStatsofSamples = function(keyword, callback) {
 
         var r = [];
-        // get the result parallel
-        async.series([
-            function() {
-                that.getCountofSamplesByLabeled(keyword, function(status, msg){
-                    r.push(msg['amount']);
-                });
-            },
-            function() {
-                that.getCountofSamplesByConflict(keyword, function(status, msg){
-                    callback(null, msg['amount']);
-                });
-            },
-            function() {
-                that.getCountofSamplesByTrash(keyword, function(status, msg){
-                    callback(null, msg['amount']);
-                });
-            },
-            function() {
-                that.getCountofSamplesByUnlabeled(keyword, function(status, msg){
-                    callback(null, msg['amount']);
-                });
-            }
-        ], function(err, results){
-           if(err) {
-               console.log("ERROR: getStatsofSamples");
-               callback(2, "getStats error");
-           }
-           else {
-               console.log("results");
-               console.log(results);
-               callback(0, results);
-           }
+        /**
+        var tasks = ["getCountofSamplesByLabeled",
+                     "getCountofSamplesByConflict",
+                     "getCountofSamplesByTrash",
+                     "getCountofSamplesByUnlabel"];
+        async.eachSeries(tasks, function(item, callback){
+            // item is just ecah element in tasks
+            that.apply(item, [keyword, function(status, msg){
+                r.push(msg["amount"]);
+            }]);
+
         });
+        console.log(r);
+        return r;
+         **/
+        // get the result parallel
+        async.parallel([
+
+            function(callback) {
+                that.getCountofSamplesByLabeled(keyword, function(status, msg){
+                    console.log("labeled");
+                    callback(null, msg["amount"]);
+                });
+            },
+            function(callback) {
+                that.getCountofSamplesByConflict(keyword, function(status, msg){
+                    console.log("conflict");
+                    callback(null, msg["amount"]);
+
+                });
+            },
+            function(callback) {
+                that.getCountofSamplesByTrash(keyword, function(status, msg){
+                    console.log("trash");
+                    callback(null, msg["amount"]);
+                });
+            },
+            function(callback) {
+                that.getCountofSamplesByUnlabeled(keyword, function(status, msg){
+                    console.log("unlabeled");
+                    callback(null, msg["amount"]);
+                });
+            }],function(err, results) {
+
+                console.log(results);
+                callback(0, results);
+            }
+               );
     };
 
     return {
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
         getCountofSamplesByConflict: getCountofSamplesByConflict,
         getCountofSamplesByTrash: getCountofSamplesByTrash,
-        getCountofSamplesByUnlabeld: getCountofSamplesByTrash,
+        getCountofSamplesByUnlabeld: getCountofSamplesByUnlabeled,
         getStatsofSamples: getStatsofSamples
     };
 })();

@@ -1,5 +1,6 @@
 module.exports = {
 
+    title: "微博标注平台",
     mysql_connect : {
         // mysql setting
         host: "localhost",
@@ -12,7 +13,7 @@ module.exports = {
     keywordList : [
         "IPhone6",
         "MaYun",
-        "Marriages",
+        "Marriage",
         "Interstellar",
         "BaBaQuNar",
         "DoubleEleven",
