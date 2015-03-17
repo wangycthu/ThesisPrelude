@@ -27,11 +27,34 @@ router.get('/', function (req, res, next) {
             callback(null, msg);
         });
     }, function(err, results){
-
         console.log(results);
         res.render("overview",
                    {title: config.title,
                     statsData: results});
+
+        var statsData = [];
+        var categories = {
+            0: "Labeled",
+            1: "Conflict",
+            2: "Trash",
+            3: "Unlabeled"
+        };
+        // statsData format: 4*n 
+        for(var i=0; i<4; i++) {
+            statsData.push({
+                "name": categories[i],
+                "data": []
+            });
+            for(var j=0; j<keywords.length; j++) {
+                statsData[i]["data"].push(results[j][i]);
+            }
+        };
+        console.log(statsData);
+        res.render("overview",
+                   {title: config.title,
+                    keywords: keywords,
+                    statsData: statsData
+                });
     });
 });
 
