@@ -5,6 +5,7 @@ var express = require('express');
 // var User = require('./user');
 var user = require("../models/user");
 var router = express.Router();
+var sha1 = require('node-sha1');
 
 router.post('/', function (req, res) {
     var _username = req.body.userName;
@@ -13,6 +14,8 @@ router.post('/', function (req, res) {
     user.login(_username, _password, function(status, msg){
 
         if (status == 0) {
+            // set user cookie
+            res.cookie.user = sha1("wyc" + _username);
             console.log("msg[username]: " + msg["username"]);
         }
         else if(status == 1) {

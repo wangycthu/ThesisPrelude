@@ -67,13 +67,16 @@ html
                 });
             });    
     body
-    block content
-        div.ui.vertical.inverted.sidebar.menu
-            div.item
-                p
-                    neutronest
-            div.tab.header.segment
-                div.introduction
-                    h1.ui.header
-                        数据统计后台
+      block content
+        div.ui.segment
+          h2.ui.header
+            i.setting.icon
+            div.content 情感标注后台
+              div(class="sub header") Beta
+          div.ui.breadcrumb
+            a.section Home
+            div.divider |
+            div(class="active section") overview
+            div.divider |
+            a.section(href="/label") label
         div#chart-container

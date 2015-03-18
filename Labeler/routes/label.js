@@ -29,6 +29,12 @@ var keywordList = {
 };
 
 router.get('/', function (req, res, next) {
+
+    // check if login
+    if (res.cookie.user == undefined) {
+        res.redirect("/index");
+        return;
+    }
   var _username = req.cookies.username;
   var _keyword = req.query.kw;
   // default select
@@ -38,6 +44,9 @@ router.get('/', function (req, res, next) {
   var _labelCount = null;
   var _validateCount = null;
 
+  // test
+    console.log("cookies");
+    console.log(res.cookie.user);
   conn.query(
       'select * from UserInfo where username=\'' + _username + '\'',
       function(err, rows, fields) {
