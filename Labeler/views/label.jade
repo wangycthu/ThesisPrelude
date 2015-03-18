@@ -18,12 +18,7 @@ html
             div(class="sub header") Beta
           div.ui.breadcrumb
             a.section Home
-            if res.cookie.user != undefined
-              div.divider |
-              div(class="active section") overview
-              div.divider |
-              a.section(href="/label") label
-              
+                
         - var keywords = {'iPhone6': 'iPhone6', 'MaYun': '马云', 'Marriage': '结婚', 'Interstellar': '星际穿越', 'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一', 'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘', 'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾', 'XiaoLongNv': '小龙女'}
         - for (var key in keywords)
           if key == keyword
