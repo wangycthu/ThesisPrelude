@@ -12,7 +12,8 @@ var user = require("../models/user");
 router.get('/', function (req, res, next) {
 
     // check if login
-    if (res.cookie.user == undefined) {
+    var token = res.cookie.user;
+    if (token === undefined) {
         res.redirect("/index");
         return;
     }
@@ -24,10 +25,6 @@ router.get('/', function (req, res, next) {
     }
     var _labelCount = null;
     var _validateCount = null;
-
-    // test
-    console.log("cookies");
-    console.log(res.cookie.user);
 
     async.waterfall([
 
@@ -56,6 +53,7 @@ router.get('/', function (req, res, next) {
                     res.render('label', {
                         title: '微博标注平台',
                         keyword: _keyword,
+                        isSuper: res.cookie.isSuper,
                         username: _username,
                         rows: msg,
                         labelCount: count["labelCount"],
@@ -131,12 +129,12 @@ router.post('/', function (req, res) {
     var _labels = req.body.labels;
     var thread = new Thread(_id, _keyword, _username, _labels);
     thread.save(function (status, msg) {
-      res.json({'status': status, 'msg': msg})
+      res.json({'status': status, 'msg': msg});
     });
   } else {
     var thread = new Thread(_id, _keyword);
     thread.trash(function (status, msg) {
-      res.json({'status': status, 'msg': msg})
+      res.json({'status': status, 'msg': msg});
     });
   }
 });
