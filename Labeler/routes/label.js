@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
     var _keyword = req.query.kw;
     // default select
     if (_keyword == null) {
-        _keyword = 'iPhone6'
+        _keyword = 'iPhone6';
     }
     var _labelCount = null;
     var _validateCount = null;

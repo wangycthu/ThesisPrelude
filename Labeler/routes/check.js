@@ -17,14 +17,22 @@ router.get('/', function(req, res, next){
         console.log("not login");
         res.redirect("/index");
     }
-
+    var _username = req.cookies.username;
+    var _keyword = req.query.kw;
+    // default select
+    if (_keyword == null) {
+        _keyword = 'iPhone6';
+    }
     var keywords = config.keywordList;
-    res.render("check",
-              {
-                  title: config.title,
-                  keywords: keywords
-              });
+    samples.getSamplesByConflict(_keyword, function(status, rows){
 
+        res.render("check",
+                   {
+                       title: config.title,
+                       keywords: keywords,
+                       rows: rows
+                   });
+    });
 });
 
 module.exports = router;

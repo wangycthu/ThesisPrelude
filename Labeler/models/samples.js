@@ -3,6 +3,7 @@
  */
 
 var async = require("async");
+var Set = require("collections/set");
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 
@@ -11,6 +12,9 @@ var samples = (function(){
     var that = this;
 
 
+    /*
+     * In the label page logic ===================================
+     **/
     that.getSamplesByLabels = function(keyword, username, callback) {
         async.waterfall([
             function(callback) {
@@ -58,6 +62,9 @@ var samples = (function(){
         });
     };
 
+    /*
+     * In the overview page logic ===================================
+     **/
     that.getCountofSamplesByLabeled = function(keyword, callback) {
 
         MysqlClient.getCountofSamplesByLabeled(keyword, function(status, msg){
@@ -124,13 +131,68 @@ var samples = (function(){
                );
     };
 
+    /*
+     * In the check page logic ===================================
+     **/
+
+    that.getSamplesByConflict = function(keyword, callback) {
+        /*
+         * This method is more complex.
+         * First get all the conflict ids.
+           Then store their mapping parent-ids with a set,
+           keep the parent UNIQUE!
+           then for each parent, get their thread.
+         */
+        MysqlClient.getIdsByConflict(keyword, function(status, msg){
+
+            if (status != 0) callback(1, "error");
+            else {
+                //
+                var conflictIds = msg;
+                console.log(conflictIds);
+                var parentIds = new Set();
+                async.eachSeries(conflictIds, function(cid, callback){
+
+                    MysqlClient.findParentIdByChild(keyword, cid, function(status, row){
+                        if (status != 0) callback(1, "error");
+                        else {
+                            // get group id
+                            parentIds.add(row["id"]);
+                            callback(0, parentIds);
+                        };
+                    });
+                }, function(err, results){
+
+                    // result is parentIds
+                    // get all the thread By parentIds
+                    var parentIdsArray = Array.from(parentIds);
+                    console.log("==============");
+                    console.log(parentIdsArray);
+                    if (parentIdsArray.length === 0) {
+                        callback(0, []);
+                    } else {
+                        MysqlClient.getSamplesByIds(keyword, parentIdsArray, function(status, rows){
+                            if (status != 0) callback(1, "error");
+                            else callback(0, rows);
+                        });
+                    }
+                });
+            }
+        });
+
+    };
+
     return {
+        // stats
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
         getCountofSamplesByConflict: getCountofSamplesByConflict,
         getCountofSamplesByTrash: getCountofSamplesByTrash,
         getCountofSamplesByUnlabeld: getCountofSamplesByUnlabeled,
+        // label
         getStatsofSamples: getStatsofSamples,
-        getSamplesByLabels: getSamplesByLabels
+        getSamplesByLabels: getSamplesByLabels,
+        // check
+        getSamplesByConflict: getSamplesByConflict
     };
 })();
 

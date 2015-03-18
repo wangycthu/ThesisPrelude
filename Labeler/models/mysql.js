@@ -214,14 +214,45 @@ var MysqlClient = (function() {
         conn.query(_query, [keyword, ids],
                    function(err, rows, fields){
                        if(err) {
-
                            console.log(err);
+                           console.log("ERROR: getSamplesByids");
                            callback(1, "DB error");
                        } else callback(0, rows);
                    });
     };
 
-    //
+    that.getIdsByConflict = function(keyword, callback) {
+
+        var _query = "SELECT id FROM ?? "
+                + " WHERE ((label1 IS NOT NULL) "
+                + "AND (label2 IS NOT NULL) "
+                + " AND (label1 != label2 ))";
+        conn.query(_query, [keyword],
+                  function(err, rows, fields){
+                      if(err) {
+                          console.log(err);
+                          console.log("ERROR: getIdsByConflict");
+                          callback(1, "DB error");
+                      } else callback (0, rows);
+                  });
+    };
+
+    that.findParentIdByChild = function(keyword, childId, callback) {
+
+        var _query = "SELECT id FROM ?? WHERE id = ? AND number = 0 ";
+        conn.query(_query, [keyword, childId],
+                  function(err, rows, fields){
+
+                      if(err) {
+                          console.log(err);
+                          consolg.log("ERROR: findParentIdByChild");
+                          callback(1, "DB error");
+                      } else if(!rows.length) {
+                          callback(2, "user not find");
+                      } else callback(0, rows[0]);
+                  });
+    };
+
     return {
         createConnection: createConnection,
         getUserInfo: getUserInfo,
@@ -232,7 +263,9 @@ var MysqlClient = (function() {
         getCountofSamplesByTrash: getCountofSamplesByTrash,
         getCountofParentsByUser: getCountofParentsByUser,
         getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
-        getSamplesByIds: getSamplesByIds
+        getSamplesByIds: getSamplesByIds,
+        getIdsByConflict: getIdsByConflict,
+        findParentIdByChild: findParentIdByChild
     };
 })();
 
