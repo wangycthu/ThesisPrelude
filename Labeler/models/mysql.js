@@ -82,6 +82,16 @@ var MysqlClient = (function() {
         });
     };
 
+    that.getUser = function(username, callback) {
+        var _query = "SELECT * FROM UserInfo WHERE username = ? ";
+        that.conn.query(_query, [username], function(err, rows, fields){
+            if(err) {
+                console.log("ERROR: getUser");
+                callback(1, "db error");
+            } else callback(0, rows);
+        });
+    };
+
     that.insertUser = function (user) {
 
         var _query = "INSERT INTO UserInfo "
@@ -165,13 +175,64 @@ var MysqlClient = (function() {
                    });
     };
 
+    // get the parent samples
+    that.getCountofParentsByUser = function(keyword, username, callback) {
+
+        var _query = "SELECT COUNT(id) as amount FROM ?? "
+                + " WHERE number = 0 AND ((label1 is NULL) "
+                + " OR (user1 != ? AND label2 is NULL)) "
+                + " AND (username != \'USERNAME\')";
+        conn.query(_query, [keyword, username],
+                   function(err, rows, fields){
+                       if(err) {
+                           console.log(err);
+                           callback(1, "DB error");
+                       } else {
+                           console.log(rows);
+                           callback(0, rows[0]);
+                       }
+                  });
+    };
+
+    that.getSamplesIDRandomlyByUser = function(keyword, username, rdmlimit, callback) {
+        var _query = "SELECT id FROM ?? "
+                + " WHERE number = 0 AND ((label1 is NULL)"
+                + " OR (user1 != ? AND label2 is NULL)) "
+                + " AND (username <> \'USERNAME\') limit ? , 1";
+        conn.query(_query, [keyword, username, rdmlimit],
+                  function(err, rows, fields){
+                      if(err) {
+                          console.log(err);
+                          callback(1, "DB error");
+                      } else callback(0, rows);
+                  });
+    };
+
+    that.getSamplesByIds = function(keyword, ids, callback){
+
+        var _query = "SELECT * FROM ?? WHERE id = ? ";
+        conn.query(_query, [keyword, ids],
+                   function(err, rows, fields){
+                       if(err) {
+
+                           console.log(err);
+                           callback(1, "DB error");
+                       } else callback(0, rows);
+                   });
+    };
+
+    //
     return {
         createConnection: createConnection,
         getUserInfo: getUserInfo,
+        getUser: getUser,
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
         getCountofSamplesByConflict: getCountofSamplesByConflict,
         getCountofSamplesByUnlabeled: getCountofSamplesByUnlabeled,
-        getCountofSamplesByTrash: getCountofSamplesByTrash
+        getCountofSamplesByTrash: getCountofSamplesByTrash,
+        getCountofParentsByUser: getCountofParentsByUser,
+        getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
+        getSamplesByIds: getSamplesByIds
     };
 })();
 

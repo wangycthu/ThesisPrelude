@@ -6,11 +6,13 @@ var cookieParser = require('cookie-parser');
 
 var bodyParser = require('body-parser');
 
+// All routes define
 var routes = require('./routes/index');
 var labels = require('./routes/label');
 var login = require('./routes/login');
 var register = require('./routes/register');
 var overview = require('./routes/overview');
+var check = require("./routes/check");
 
 var app = express();
 
@@ -26,13 +28,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// add views
 app.use('/', routes);
 app.use('/index', routes);
 app.use('/label', labels);
 app.use('/login', login);
 app.use('/register', register);
 app.use('/overview', overview);
-
+app.use('/check', check);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

@@ -27,11 +27,13 @@ router.get('/', function (req, res, next) {
             callback(null, msg);
         });
     }, function(err, results){
+
+        /**
         console.log(results);
         res.render("overview",
                    {title: config.title,
                     statsData: results});
-
+         **/
         var statsData = [];
         var categories = {
             0: "Labeled",
@@ -39,7 +41,7 @@ router.get('/', function (req, res, next) {
             2: "Trash",
             3: "Unlabeled"
         };
-        // statsData format: 4*n 
+        // statsData format: 4*n
         for(var i=0; i<4; i++) {
             statsData.push({
                 "name": categories[i],

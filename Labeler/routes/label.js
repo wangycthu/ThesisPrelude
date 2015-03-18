@@ -5,19 +5,68 @@ var express = require('express');
 var router = express.Router();
 var Thread = require('./thread');
 var async = require("async");
-var MysqlClient = require("../models/mysql");
-var conn = MysqlClient.createConnection();
-
+// var MysqlClient = require("../models/mysql");
+// var conn = MysqlClient.createConnection();
+var samples = require("../models/samples");
+var user = require("../models/user");
 router.get('/', function (req, res, next) {
-  var _username = req.cookies.username;
-  var _keyword = req.query.kw;
-  // default select
-  if (_keyword == null) {
-    _keyword = 'iPhone6'
-  }
-  var _labelCount = null;
-  var _validateCount = null;
 
+    // check if login
+    if (res.cookie.user == undefined) {
+        res.redirect("/index");
+        return;
+    }
+    var _username = req.cookies.username;
+    var _keyword = req.query.kw;
+    // default select
+    if (_keyword == null) {
+        _keyword = 'iPhone6'
+    }
+    var _labelCount = null;
+    var _validateCount = null;
+
+    // test
+    console.log("cookies");
+    console.log(res.cookie.user);
+
+    async.waterfall([
+
+        function(callback) {
+
+            user.getUser(_username, function(status, msg){
+
+                if(status != 0) callback(1, "error");
+                else {
+                    console.log(msg);
+                    callback(0, {
+                        "labelCount": msg[0]["labelCount"],
+                        "validateCount": msg[0]["validateCount"]
+                    });
+                }
+            });
+        },
+
+        function(err, count) {
+
+            samples.getSamplesByLabels(_keyword, _username, function(status, msg){
+
+                if(status != 0) {
+                    res.send("发生错误！");
+                } else {
+                    res.render('label', {
+                        title: '微博标注平台',
+                        keyword: _keyword,
+                        username: _username,
+                        rows: msg,
+                        labelCount: count["labelCount"],
+                        validateCount: count["validateCount"]
+                    });
+                }
+            });
+
+        }
+    ]);
+    /**
   conn.query(
       'select * from UserInfo where username=\'' + _username + '\'',
       function(err, rows, fields) {
@@ -69,9 +118,9 @@ router.get('/', function (req, res, next) {
           }
         }
       });
-    }
-  });
+        **/
 });
+
 
 router.post('/', function (req, res) {
   var _id = req.body.id;
