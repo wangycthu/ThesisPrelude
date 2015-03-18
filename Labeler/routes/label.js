@@ -35,35 +35,32 @@ router.get('/', function (req, res, next) {
                 if(status != 0) callback(1, "error");
                 else {
                     console.log(msg);
-                    callback(0, {
+                    callback(null, {
                         "labelCount": msg[0]["labelCount"],
                         "validateCount": msg[0]["validateCount"]
                     });
                 }
             });
-        },
-
-        function(err, count) {
-
-            samples.getSamplesByLabels(_keyword, _username, function(status, msg){
-
-                if(status != 0) {
-                    res.send("发生错误！");
-                } else {
-                    res.render('label', {
-                        title: '微博标注平台',
-                        keyword: _keyword,
-                        isSuper: res.cookie.isSuper,
-                        username: _username,
-                        rows: msg,
-                        labelCount: count["labelCount"],
-                        validateCount: count["validateCount"]
-                    });
-                }
-            });
-
         }
-    ]);
+    ], function (err, result){
+        samples.getSamplesByLabels(_keyword, _username, function(status, msg){
+
+            if(status != 0) {
+                res.send("发生错误！");
+            } else {
+                res.render('label', {
+                    title: '微博标注平台',
+                    keyword: _keyword,
+                    isSuper: res.cookie.isSuper,
+                    username: _username,
+                    rows: msg,
+                    labelCount: result["labelCount"],
+                    validateCount: result["validateCount"]
+                });
+            }
+        });
+
+    });
     /**
   conn.query(
       'select * from UserInfo where username=\'' + _username + '\'',
