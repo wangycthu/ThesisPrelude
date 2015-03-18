@@ -15,8 +15,16 @@ var user = (function(){
             callback(status, msg);
         });
     };
+
+    that.getUser = function(username, callback) {
+        MysqlClient.getUser(username, function(status, msg){
+            if(status != 0) callback(1, "db error");
+            else callback(0, msg);
+        });
+    };
     return {
-        login: login
+        login: login,
+        getUser: getUser
     };
 
 })();

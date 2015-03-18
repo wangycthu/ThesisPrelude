@@ -2,15 +2,14 @@
  * Created by wangyc on 15-2-27.
  */
 
-
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 
 function Thread(_id, _keyword, _username, _labels) {
   this.id = _id;
   this.keyword = _keyword;
-  this.username = _username;
-  this.labels = JSON.parse(_labels); //Array
+  this.username = arguments[2] ? arguments[2] : null;
+  this.labels = arguments[3] ? JSON.parse(arguments[3]) : null; //Array
   this.save = function (callback) {
     var that = this;
     conn.query(
@@ -59,7 +58,21 @@ function Thread(_id, _keyword, _username, _labels) {
                 }
                 callback(1, null);
           });
-        });
+        }
+    );
+  };
+
+  this.trash = function (callback) {
+    var that = this;
+    conn.query(
+        'update LabelStatus set status=7 where id=' + that.id,
+        function (err, res) {
+          if (err) {
+            callback(0, "Trash data failed.");
+          }
+          callback(1, null);
+        }
+    )
   }
 }
 

@@ -10,6 +10,54 @@ var samples = (function(){
 
     var that = this;
 
+
+    that.getSamplesByLabels = function(keyword, username, callback) {
+        async.waterfall([
+            function(callback) {
+
+                MysqlClient.getCountofParentsByUser(keyword, username, function(status, msg){
+                    if(status != 0) callback(null, "error");
+                    else {
+
+                        callback(null, msg['amount']);
+                    }
+                });
+            },
+
+            function(amount, callback) {
+                if(amount === "error") {
+                    callback(null, "error");
+                }
+                else {
+                    // get random thread ids
+                    var rdmLimit = Math.floor(Math.random() * amount);
+                    MysqlClient.getSamplesIDRandomlyByUser(keyword, username, rdmLimit, function(status, rows){
+                        if(status != 0) callback(null, "error");
+                        else {
+                            callback(null, rows[0]['id']);
+                        }
+                    });
+                }
+            },
+
+            function(id, callback) {
+
+                if(id === "error") callback(null, "error");
+                else {
+                    MysqlClient.getSamplesByIds(keyword, id, function(status, msg){
+                        if(status != 0) callback(1, "error");
+                        else callback(null, msg);
+                    });
+                }
+            },
+
+        ], function (err, result) {
+            console.log("result");
+            console.log(result);
+            callback(0, result);
+        });
+    };
+
     that.getCountofSamplesByLabeled = function(keyword, callback) {
 
         MysqlClient.getCountofSamplesByLabeled(keyword, function(status, msg){
@@ -41,21 +89,6 @@ var samples = (function(){
     that.getStatsofSamples = function(keyword, callback) {
 
         var r = [];
-        /**
-        var tasks = ["getCountofSamplesByLabeled",
-                     "getCountofSamplesByConflict",
-                     "getCountofSamplesByTrash",
-                     "getCountofSamplesByUnlabel"];
-        async.eachSeries(tasks, function(item, callback){
-            // item is just ecah element in tasks
-            that.apply(item, [keyword, function(status, msg){
-                r.push(msg["amount"]);
-            }]);
-
-        });
-        console.log(r);
-        return r;
-         **/
         // get the result parallel
         async.parallel([
 
@@ -96,7 +129,8 @@ var samples = (function(){
         getCountofSamplesByConflict: getCountofSamplesByConflict,
         getCountofSamplesByTrash: getCountofSamplesByTrash,
         getCountofSamplesByUnlabeld: getCountofSamplesByUnlabeled,
-        getStatsofSamples: getStatsofSamples
+        getStatsofSamples: getStatsofSamples,
+        getSamplesByLabels: getSamplesByLabels
     };
 })();
 

@@ -27,6 +27,11 @@ router.get('/', function (req, res, next) {
             callback(null, msg);
         });
     }, function(err, results){
+        console.log(results);
+        res.render("overview",
+                   {title: config.title,
+                    statsData: results});
+
         var statsData = [];
         var categories = {
             0: "Labeled",
