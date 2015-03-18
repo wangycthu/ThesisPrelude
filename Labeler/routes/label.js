@@ -4,29 +4,9 @@
 var express = require('express');
 var router = express.Router();
 var Thread = require('./thread');
-
-var mysql = require('mysql');
-/**
-var conn = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '199283155wyc',
-  database: 'Microblog',
-  charset: 'UTF8MB4'
-});
- **/
+var async = require("async");
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
-
-var keywordList = {
-  'iPhone6': 'iPhone6', 'MaYun': '马云',
-  'Marriage': '结婚', 'Interstellar': '星际穿越',
-  'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一',
-  'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘',
-  'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾',
-  'XiaoLongNv': '小龙女'
-};
 
 router.get('/', function (req, res, next) {
   var _username = req.cookies.username;
@@ -50,34 +30,45 @@ router.get('/', function (req, res, next) {
       }
   );
 
-  var _query = 'select id from ' + _keyword +
+  var _query = 'select count(*) from ' + _keyword +
       ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
-      '\' and label2 is NULL)) and (username != \'USERNAME\') limit 1';
-  conn.query(_query, function (err, rows, fields) {
+      '\' and label2 is NULL)) and (username != \'USERNAME\')';
+
+  conn.query(_query, function(err, rows, fields) {
     if (err) {
-      console.log(err);
+      console.log("Error: get count(*) of unlabeled.");
     } else {
-      if (rows.length) {
-        var _id = rows[0]['id'];
-        conn.query('select * from ' + _keyword + ' where id=' + _id,
-            function (err, _rows, fields) {
-              if (err) {
-                console.log(err);
-              } else {
-                res.render('label', {
-                  title: '微博标注平台',
-                  keyword: _keyword,
-                  username: _username,
-                  rows: _rows,
-                  labelCount: _labelCount,
-                  validateCount: _validateCount
-                });
-              }
-            }
-        );
-      } else {
-        // TODO: show 'This topic has been finished.'
-      }
+      var rdmlimit = Math.floor(Math.random() * rows[0]['count(*)']);
+      _query = 'select id from ' + _keyword +
+      ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
+      '\' and label2 is NULL)) and (username != \'USERNAME\') limit ' + rdmlimit + ',1';
+      conn.query(_query, function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (rows.length) {
+            var _id = rows[0]['id'];
+            conn.query('select * from ' + _keyword + ' where id=' + _id,
+                function (err, _rows, fields) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.render('label', {
+                      title: '微博标注平台',
+                      keyword: _keyword,
+                      username: _username,
+                      rows: _rows,
+                      labelCount: _labelCount,
+                      validateCount: _validateCount
+                    });
+                  }
+                }
+            );
+          } else {
+            // TODO: show 'This topic has been finished.'
+          }
+        }
+      });
     }
   });
 });
