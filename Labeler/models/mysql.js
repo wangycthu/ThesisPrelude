@@ -226,7 +226,7 @@ var MysqlClient = (function() {
         var _query = "SELECT id FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) "
                 + "AND (label2 IS NOT NULL) "
-                + " AND (label1 != label2 ))";
+                + " AND (label1 != label2 )) ";
         conn.query(_query, [keyword],
                   function(err, rows, fields){
                       if(err) {
@@ -242,7 +242,7 @@ var MysqlClient = (function() {
         var _query = "SELECT count(id) as amount FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) "
                 + " AND (label2 IS NOT NULL) "
-                + " AND (label1 != label2 ))";
+                + " AND (label1 != label2 )) ";
 
         conn.query(_query, [keyword],
             function(err, rows, fields){

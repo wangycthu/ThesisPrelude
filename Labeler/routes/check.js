@@ -65,9 +65,15 @@ router.post("/", function(req, res){
         console.log("not login");
         res.redirect("/index");
     }
-    var _id = req.body.id;
-    var _keyword = req.body.keyword;
+    var _id = res.cookie.threadID;
+    var _keyword = res.cookie.keyword;
     var _trash = req.body.trash;
+
+    console.log([
+        "id_cookie: ", res.cookie.threadID,
+        "keyword: ", res.cookie.keyword
+    ]);
+    console.log(["_id: ", _id, "keyword: ", _keyword, "_trash: ", _trash]);
     if (_trash == 0) {
         var _username = req.body.username;
         var _labels = req.body.labels;

@@ -64,16 +64,23 @@ function Thread(_id, _keyword, _username, _labels) {
 
   this.trash = function (callback) {
       var that = this;
-      var _query = "UPDATE ?? set valid = 2 WHERE id in ( ? ) ";
+      console.log([
+          "in the tread:,", _keyword,
+          "id: ", _id
+      ]);
+      // set label1 = label2 = 2
+      var _query = "UPDATE ?? set label1=2, label2=2  WHERE id = ?  ";
     conn.query(_query, [_keyword, _id],
         function (err, res) {
           if (err) {
             callback(0, "Trash data failed.");
           }
-          callback(1, null);
+          else callback(1, null);
         }
-    )
-  }
+    );
+  };
+
+
 }
 
 module.exports = Thread;

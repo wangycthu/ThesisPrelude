@@ -50,7 +50,10 @@ html
        div.ui.page.grid
         div.row
           div.ui.ten.wide.column
-            div.ui.threaded.comments
+              if rows.length
+                div.ui.threaded.comments(id=rows[0]['id'])
+              else
+                div.ui.threaded.comments
               h3.ui.dividing.header= '关键词：' + keywords[keyword]
               each row in rows
                 div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
