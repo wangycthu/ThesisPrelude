@@ -48,7 +48,7 @@ function Thread(_id, _keyword, _username, _labels) {
                   if (err) {
                     callback(0, "Update table " + that.keyword + " error.");
                   }
-            });
+                });
           }
           conn.query(
               'update UserInfo set labelCount=labelCount+1 where username=\'' + that.username + '\'',
@@ -57,23 +57,28 @@ function Thread(_id, _keyword, _username, _labels) {
                   callback(0, "Update UserInfo failed.");
                 }
                 callback(1, null);
-          });
+              });
         }
     );
   };
 
   this.trash = function (callback) {
     var that = this;
-    conn.query(
-        'update ' + that.keyword + ' set label1=2, user1=\'' + that.username
-        + '\', label2=2, user2=\'' + that.username + '\' where id=' + that.id,
+    console.log([
+      "in the tread:,", _keyword,
+      "id: ", _id
+    ]);
+    // set label1 = label2 = 2
+    var _query = "UPDATE ?? set label1=2, label2=2  WHERE id = ?  ";
+    conn.query(_query, [_keyword, _id],
         function (err, res) {
           if (err) {
             callback(0, "Trash data failed.");
           }
-          callback(1, null);
-    });
-  }
+          else callback(1, null);
+        }
+    );
+  };
 }
 
 module.exports = Thread;

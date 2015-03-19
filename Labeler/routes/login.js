@@ -17,6 +17,7 @@ router.post('/', function (req, res) {
             // set user cookie
             res.cookie.user = sha1("wyc" + _username);
             console.log("msg[username]: " + msg["username"]);
+            res.cookie.isSuper = msg['isSuper'];
         }
         else if(status == 1) {
             console.log("db errors");

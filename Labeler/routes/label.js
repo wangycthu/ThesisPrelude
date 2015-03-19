@@ -10,9 +10,9 @@ var async = require("async");
 var samples = require("../models/samples");
 var user = require("../models/user");
 router.get('/', function (req, res, next) {
-
   // check if login
-  if (res.cookie.user == undefined) {
+  var token = res.cookie.user;
+  if (token === undefined) {
     res.redirect("/index");
     return;
   }
@@ -20,52 +20,46 @@ router.get('/', function (req, res, next) {
   var _keyword = req.query.kw;
   // default select
   if (_keyword == null) {
-    _keyword = 'iPhone6'
+    _keyword = 'iPhone6';
   }
   var _labelCount = null;
   var _validateCount = null;
 
-  // test
-  console.log("cookies");
-  console.log(res.cookie.user);
-
   async.waterfall([
 
-    function (callback) {
+    function(callback) {
 
-      user.getUser(_username, function (status, msg) {
+      user.getUser(_username, function(status, msg){
 
-        if (status != 0) callback(1, "error");
+        if(status != 0) callback(1, "error");
         else {
           console.log(msg);
-          callback(0, {
+          callback(null, {
             "labelCount": msg[0]["labelCount"],
             "validateCount": msg[0]["validateCount"]
           });
         }
       });
-    },
-
-    function (err, count) {
-
-      samples.getSamplesByLabels(_keyword, _username, function (status, msg) {
-
-        if (status != 0) {
-          res.send("发生错误！");
-        } else {
-          res.render('label', {
-            title: '微博标注平台',
-            keyword: _keyword,
-            username: _username,
-            rows: msg,
-            labelCount: count["labelCount"],
-            validateCount: count["validateCount"]
-          });
-        }
-      });
-
     }
-  ]);
+  ], function (err, result){
+    samples.getSamplesByLabels(_keyword, _username, function(status, msg){
+
+      if(status != 0) {
+        res.send("发生错误！");
+      } else {
+        res.render('label', {
+          title: '微博标注平台',
+          keyword: _keyword,
+          isSuper: res.cookie.isSuper,
+          username: _username,
+          rows: msg,
+          labelCount: result["labelCount"],
+          validateCount: result["validateCount"]
+        });
+      }
+    });
+
+  });
 });
 
 router.post('/', function (req, res) {
@@ -77,12 +71,12 @@ router.post('/', function (req, res) {
     var _labels = req.body.labels;
     var thread = new Thread(_id, _keyword, _username, _labels);
     thread.save(function (status, msg) {
-      res.json({'status': status, 'msg': msg})
+      res.json({'status': status, 'msg': msg});
     });
   } else {
     var thread = new Thread(_id, _keyword, _username);
     thread.trash(function (status, msg) {
-      res.json({'status': status, 'msg': msg})
+      res.json({'status': status, 'msg': msg});
     });
   }
 });

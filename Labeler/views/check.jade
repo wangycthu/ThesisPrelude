@@ -1,0 +1,134 @@
+//
+  Created by neutronest on 2015-03-18
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='css/semantic.min.css')
+    link(rel='stylesheet', href='css/style.css')
+    script(src='js/jquery.min.js')
+    script(src='js/semantic.min.js')
+    script(src='js/check.js')
+  body
+    block content
+      div.ui.segment
+        h2.ui.segment
+          i.comments.icon
+          div.content 微博情感标注平台
+            div(class="sub header") Beta
+        div.ui.breadcrumb
+          a.section Home
+          div.divider |
+          a.section(href="/overview") overview
+          div.divider |
+          div(class="active section") check
+          div.divider |
+          a.section(href="/label") label
+          - var keywords = {'iPhone6': 'iPhone6', 'MaYun': '马云', 'Marriage': '结婚', 'Interstellar': '星际穿越', 'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一', 'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘', 'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾', 'XiaoLongNv': '小龙女'}
+          div.ui.segment
+            - for (var key in keywords)
+              if key == keyword
+                a.ui.tag.green.label('id'=key)= keywords[key]
+              else
+                a.ui.tag.label('id'=key)= keywords[key]
+            div.ui.right.labeled.icon.red.button
+              i.sign.out.icon
+              label Sign out
+          script.
+            $(document).ready(function () {
+              $('.ui.tag.label').click(function () {
+                $.cookie('keyword', $(this).attr('id'));
+                window.location = $(location)[0].origin + '/check?kw=' + $(this).attr('id');
+              })
+              $('.right.icon.red.button').click(function () {
+                // sign out
+                $.cookie('username', null);
+                $.cookie('isSuper', null);
+                window.location = $(location)[0].origin;
+              })          
+            })
+       div.ui.page.grid
+        div.row
+          div.ui.ten.wide.column
+              if rows.length
+                div.ui.threaded.comments(id=rows[0]['id'])
+              else
+                div.ui.threaded.comments
+              h3.ui.dividing.header= '关键词：' + keywords[keyword]
+              each row in rows
+                div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
+                  div.content
+                    a.author= row['username']
+                    if row['text']
+                      div.text= row['text']
+                    else
+                      div.text= '转发微博'
+                    div.ui.form
+                      div.grouped.inline.fields
+                        if row['label1'] == row['label2']
+                          div.field
+                            div.ui.radio.checkbox
+                              if row['label1'] == 1
+                                input(type="radio", name="sentiment" + row['number'], value="positive", checked=true, disabled=true)
+                                label +1
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="positive", disabled=true)
+                                label +1
+                          div.field
+                            div.ui.radio.checkbox
+                              if row['label1'] == 0
+                                input(type="radio", name="sentiment" + row['number'], value="neutral", checked=true, disabled=true)
+                                label 0
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="neutral", disabled=true)
+                                label 0
+                          div.field
+                            div.ui.radio.checkbox
+                              if row['label1'] == -1
+                                input(type="radio", name="sentiment" + row['number'], value="negative", checked=true, disabled=true)
+                                label -1
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="negative", disabled=true)
+                                label -1
+                        else
+                            div.field
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="positive")
+                                label +1
+                            div.field
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="positive")
+                                label 0
+                            div.field
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="negative")
+                                label -1                              
+
+                          if row['label1'] != row['label2']
+                            div.field
+                              p(style="color:red") Conflict:
+                            if row['label1'] == 1 || row['label2'] == 1
+                              div.field
+                                div(style="color:red") +1
+                            if row['label1'] == 0 || row['label2'] == 0
+                              div.field
+                                div(style="color:red") 0
+                            if row['label1'] == -1 || row['label2'] == -1
+                              div.field
+                                div(style="color:red") -1
+
+                script.
+                  $(document).ready(function () {
+                    $('.ui.checkbox').checkbox();
+                  })
+              div.ui.divider
+                div.row
+                  div#submit.ui.labeled.icon.green.button
+                    i.cloud.upload.icon
+                    p Submit
+                  div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
+                    i.trash.icon
+                    p Trash
+                  div#next.ui.right.labeled.icon.blue.disabled.button
+                    i.right.arrow.icon
+                    p Next
