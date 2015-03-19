@@ -68,12 +68,13 @@ $(function () {
 function trash() {
   var threadID = $('.ui.threaded.comments').attr('id');
   var _keyword = $.cookie('keyword');
+  var _username = $.cookie('username');
 
   $.ajax({
     url: '/label',
     type: 'POST',
     dataType: 'json',
-    data: {'id': threadID, 'keyword': _keyword, 'trash': 1},
+    data: {'id': threadID, 'keyword': _keyword, 'username': _username, 'trash': 1},
     success: function (result) {
       if (result.status == 0) {
         alert(result.msg);

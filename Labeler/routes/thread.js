@@ -65,14 +65,14 @@ function Thread(_id, _keyword, _username, _labels) {
   this.trash = function (callback) {
     var that = this;
     conn.query(
-        'update LabelStatus set status=7 where id=' + that.id,
+        'update ' + that.keyword + ' set label1=2, user1=\'' + that.username
+        + '\', label2=2, user2=\'' + that.username + '\' where id=' + that.id,
         function (err, res) {
           if (err) {
             callback(0, "Trash data failed.");
           }
           callback(1, null);
-        }
-    )
+    });
   }
 }
 
