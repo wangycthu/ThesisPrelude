@@ -67,64 +67,55 @@ html
                       div.grouped.inline.fields
                         if row['label1'] == row['label2']
                           div.field
-                            div.ui.ratio.checkbox
-                            if row['label1'] == 1
-                              input(type="radio", name="sentiment" + row['number'], value="positive", checked=true, disable=true)
-                              &nbsp;
-                              label +1
-                            else
-                              input(type="radio", name="sentiment" + row['number'], value="positive", disable=true)
-                              &nbsp;
-                              label +1
+                            div.ui.radio.checkbox
+                              if row['label1'] == 1
+                                input(type="radio", name="sentiment" + row['number'], value="positive", checked=true, disabled=true)
+                                label +1
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="positive", disabled=true)
+                                label +1
                           div.field
-                            div.ui.ratio.checkbox
-                            if row['label1'] == 0
-                              input(type="radio", name="sentiment" + row['number'], value="neutral", checked=true, disable=true)
-                              &nbsp;
-                              label 0
-                            else
-                              input(type="radio", name="sentiment" + row['number'], value="neutral", disable=true)
-                              &nbsp;
-                              label 0
+                            div.ui.radio.checkbox
+                              if row['label1'] == 0
+                                input(type="radio", name="sentiment" + row['number'], value="neutral", checked=true, disabled=true)
+                                label 0
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="neutral", disabled=true)
+                                label 0
                           div.field
-                            div.ui.ratio.checkbox
-                            if row['label1'] == -1
-                              input(type="radio", name="sentiment" + row['number'], value="negative", checked=true, disable=true)
-                              &nbsp;
-                              label -1
-                            else
-                              input(type="radio", name="sentiment" + row['number'], value="negative", disable=true)
-                              &nbsp;
-                              label -1
+                            div.ui.radio.checkbox
+                              if row['label1'] == -1
+                                input(type="radio", name="sentiment" + row['number'], value="negative", checked=true, disabled=true)
+                                label -1
+                              else
+                                input(type="radio", name="sentiment" + row['number'], value="negative", disabled=true)
+                                label -1
                         else
-                          div.field
-                            div.ui.ratio.checkbox
-                              input(type="radio", name="sentiment" + row['number'], value="positive")
-                              &nbsp;
-                              label +1
-                          div.field
-                            div.ui.ratio.checkbox
-                              input(type="radio", name="sentiment" + row['number'], value="positive")
-                              &nbsp;
-                              label 0
-                          div.field
-                            div.ui.ratio.checkbox
-                              input(type="radio", name="sentiment" + row['number'], value="negative")
-                              &nbsp;
-                              label -1                              
-                        
-                        if row['label1'] != row['label2']
-                          div.field
-                             p(style="color:red") Conflict:
-                          if row['label1'] == 1 || row['label2'] == 1
                             div.field
-                              div(style="color:red") +1
-                          if row['label1'] == 0 || row['label2'] == 0
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="positive")
+                                label +1
                             div.field
-                              div(style="color:red") 0
-                          if row['label1'] == -1 || row['label2'] == -1
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="positive")
+                                label 0
                             div.field
-                              div(style="color:red") -1
+                              div.ui.radio.checkbox
+                                input(type="radio", name="sentiment" + row['number'], value="negative")
+                                label -1                              
+
+                          if row['label1'] != row['label2']
+                            div.field
+                              p(style="color:red") Conflict:
+                            if row['label1'] == 1 || row['label2'] == 1
+                              div.field
+                                div(style="color:red") +1
+                            if row['label1'] == 0 || row['label2'] == 0
+                              div.field
+                                div(style="color:red") 0
+                            if row['label1'] == -1 || row['label2'] == -1
+                              div.field
+                                div(style="color:red") -1
 
                 script.
                   $(document).ready(function () {
