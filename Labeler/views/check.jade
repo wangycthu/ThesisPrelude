@@ -41,6 +41,7 @@ html
                 window.location = $(location)[0].origin + '/check?kw=' + $(this).attr('id');
               })
               $('.right.icon.red.button').click(function () {
+                // sign out
                 $.cookie('username', null);
                 $.cookie('isSuper', null);
                 window.location = $(location)[0].origin;
@@ -49,8 +50,7 @@ html
        div.ui.page.grid
         div.row
           div.ui.ten.wide.column
-            
-            div.ui.threaded.comments(id=1)
+            div.ui.threaded.comments
               h3.ui.dividing.header= '关键词：' + keywords[keyword]
               each row in rows
                 div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
@@ -62,15 +62,79 @@ html
                       div.text= '转发微博'
                     div.ui.form
                       div.grouped.inline.fields
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="positive")
-                            label +1
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="neutral")
-                            label 0
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="negative")
-                            label -1
+                        if row['label1'] == row['label2']
+                          div.field
+                            div.ui.ratio.checkbox
+                            if row['label1'] == 1
+                              input(type="radio", name="sentiment" + row['number'], value="positive", checked=true, disable=true)
+                              &nbsp;
+                              label +1
+                            else
+                              input(type="radio", name="sentiment" + row['number'], value="positive", disable=true)
+                              &nbsp;
+                              label +1
+                          div.field
+                            div.ui.ratio.checkbox
+                            if row['label1'] == 0
+                              input(type="radio", name="sentiment" + row['number'], value="neutral", checked=true, disable=true)
+                              &nbsp;
+                              label 0
+                            else
+                              input(type="radio", name="sentiment" + row['number'], value="neutral", disable=true)
+                              &nbsp;
+                              label 0
+                          div.field
+                            div.ui.ratio.checkbox
+                            if row['label1'] == -1
+                              input(type="radio", name="sentiment" + row['number'], value="negative", checked=true, disable=true)
+                              &nbsp;
+                              label -1
+                            else
+                              input(type="radio", name="sentiment" + row['number'], value="negative", disable=true)
+                              &nbsp;
+                              label -1
+                        else
+                          div.field
+                            div.ui.ratio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="positive")
+                              &nbsp;
+                              label +1
+                          div.field
+                            div.ui.ratio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="positive")
+                              &nbsp;
+                              label 0
+                          div.field
+                            div.ui.ratio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="negative")
+                              &nbsp;
+                              label -1                              
+                        
+                        if row['label1'] != row['label2']
+                          div.field
+                             p(style="color:red") Conflict:
+                          if row['label1'] == 1 || row['label2'] == 1
+                            div.field
+                              div(style="color:red") +1
+                          if row['label1'] == 0 || row['label2'] == 0
+                            div.field
+                              div(style="color:red") 0
+                          if row['label1'] == -1 || row['label2'] == -1
+                            div.field
+                              div(style="color:red") -1
+
+                script.
+                  $(document).ready(function () {
+                    $('.ui.checkbox').checkbox();
+                  })
+              div.ui.divider
+                div.row
+                  div#submit.ui.labeled.icon.green.button
+                    i.cloud.upload.icon
+                    p Submit
+                  div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
+                    i.trash.icon
+                    p Trash
+                  div#next.ui.right.labeled.icon.blue.disabled.button
+                    i.right.arrow.icon
+                    p Next

@@ -210,7 +210,7 @@ var MysqlClient = (function() {
 
     that.getSamplesByIds = function(keyword, ids, callback){
 
-        var _query = "SELECT * FROM ?? WHERE id = ? ";
+        var _query = "SELECT * FROM ?? WHERE id in ( ? ) ";
         conn.query(_query, [keyword, ids],
                    function(err, rows, fields){
                        if(err) {
@@ -236,6 +236,23 @@ var MysqlClient = (function() {
                       } else callback (0, rows);
                   });
     };
+
+    that.getCountofIdsByConflict = function(keyword, callback) {
+
+        var _query = "SELECT count(id) as amount FROM ?? "
+                + " WHERE ((label1 IS NOT NULL) "
+                + " AND (label2 IS NOT NULL) "
+                + " AND (label1 != label2 ))";
+
+        conn.query(_query, [keyword],
+            function(err, rows, fields){
+                if(err) {
+                    console.log(err);
+                    console.log("ERROR: getCountofSamplesByConflict");
+                    callback(1, "DB error");
+                } else callback (0, rows[0]);
+            });
+    }
 
     that.findParentIdByChild = function(keyword, childId, callback) {
 
@@ -265,6 +282,7 @@ var MysqlClient = (function() {
         getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
         getSamplesByIds: getSamplesByIds,
         getIdsByConflict: getIdsByConflict,
+        getCountofIdsByConflict: getCountofIdsByConflict,
         findParentIdByChild: findParentIdByChild
     };
 })();

@@ -61,59 +61,6 @@ router.get('/', function (req, res, next) {
         });
 
     });
-    /**
-  conn.query(
-      'select * from UserInfo where username=\'' + _username + '\'',
-      function(err, rows, fields) {
-        if (err) {
-          console.log(err);
-        } else {
-          _labelCount = rows[0]['labelCount'];
-          _validateCount = rows[0]['validateCount'];
-        }
-      }
-  );
-
-  var _query = 'select count(*) from ' + _keyword +
-      ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
-      '\' and label2 is NULL)) and (username != \'USERNAME\')';
-
-  conn.query(_query, function(err, rows, fields) {
-    if (err) {
-      console.log("Error: get count(*) of unlabeled.");
-    } else {
-      var rdmlimit = Math.floor(Math.random() * rows[0]['count(*)']);
-      _query = 'select id from ' + _keyword +
-      ' where number = 0 and ((label1 is NULL) or (user1 != \'' + _username +
-      '\' and label2 is NULL)) and (username != \'USERNAME\') limit ' + rdmlimit + ',1';
-      conn.query(_query, function (err, rows, fields) {
-        if (err) {
-          console.log(err);
-        } else {
-          if (rows.length) {
-            var _id = rows[0]['id'];
-            conn.query('select * from ' + _keyword + ' where id=' + _id,
-                function (err, _rows, fields) {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    res.render('label', {
-                      title: '微博标注平台',
-                      keyword: _keyword,
-                      username: _username,
-                      rows: _rows,
-                      labelCount: _labelCount,
-                      validateCount: _validateCount
-                    });
-                  }
-                }
-            );
-          } else {
-            // TODO: show 'This topic has been finished.'
-          }
-        }
-      });
-        **/
 });
 
 

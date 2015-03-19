@@ -6,7 +6,6 @@ var async = require("async");
 var Set = require("collections/set");
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
-
 var samples = (function(){
 
     var that = this;
@@ -135,51 +134,52 @@ var samples = (function(){
      * In the check page logic ===================================
      **/
 
+    that.getCountofIdsByConflict = function(keyword, callback) {
+
+        MysqlClient.getCountofIdsByConflict(keyword, function(status, row){
+
+            if (status != 0) callback(1, "error");
+            else callback(0, row['amount']);
+        });
+    }
+
     that.getSamplesByConflict = function(keyword, callback) {
         /*
          * This method is more complex.
-         * First get all the conflict ids.
-           Then store their mapping parent-ids with a set,
-           keep the parent UNIQUE!
-           then for each parent, get their thread.
+         * First get all the conflict ids, that is group ids.
+           keep the groupIds into a set to keep unique
+           then for each group id, get their thread.
          */
         MysqlClient.getIdsByConflict(keyword, function(status, msg){
 
             if (status != 0) callback(1, "error");
             else {
-                //
-                var conflictIds = msg;
+                // the conflictIds are just group ids
+
+                // transfer
+                var conflictIds = [];
+                for(var i=0; i<msg.length; i++) {
+                    conflictIds.push(msg[i]['id']);
+                }
                 console.log(conflictIds);
+                // then change to the set
                 var parentIds = new Set();
-                async.eachSeries(conflictIds, function(cid, callback){
-
-                    MysqlClient.findParentIdByChild(keyword, cid, function(status, row){
+                for (var j=0; j<conflictIds.length; j++) {
+                    parentIds.add(conflictIds[j]);
+                }
+                var parentIdsArray = Array.from(parentIds);
+                console.log(parentIdsArray);
+                if (parentIdsArray.length === 0) {
+                    callback(0, []);
+                } else {
+                    // get one parent Id every time
+                    MysqlClient.getSamplesByIds(keyword, parentIdsArray[0], function(status, rows){
                         if (status != 0) callback(1, "error");
-                        else {
-                            // get group id
-                            parentIds.add(row["id"]);
-                            callback(0, parentIds);
-                        };
+                        else callback(0, rows);
                     });
-                }, function(err, results){
-
-                    // result is parentIds
-                    // get all the thread By parentIds
-                    var parentIdsArray = Array.from(parentIds);
-                    console.log("==============");
-                    console.log(parentIdsArray);
-                    if (parentIdsArray.length === 0) {
-                        callback(0, []);
-                    } else {
-                        MysqlClient.getSamplesByIds(keyword, parentIdsArray, function(status, rows){
-                            if (status != 0) callback(1, "error");
-                            else callback(0, rows);
-                        });
-                    }
-                });
+                }
             }
         });
-
     };
 
     return {
@@ -192,7 +192,8 @@ var samples = (function(){
         getStatsofSamples: getStatsofSamples,
         getSamplesByLabels: getSamplesByLabels,
         // check
-        getSamplesByConflict: getSamplesByConflict
+        getSamplesByConflict: getSamplesByConflict,
+        getCountofIdsByConflict: getCountofIdsByConflict
     };
 })();
 

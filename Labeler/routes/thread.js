@@ -63,9 +63,9 @@ function Thread(_id, _keyword, _username, _labels) {
   };
 
   this.trash = function (callback) {
-    var that = this;
-    conn.query(
-        'update LabelStatus set status=7 where id=' + that.id,
+      var that = this;
+      var _query = "UPDATE ?? set valid = 2 WHERE id in ( ? ) ";
+    conn.query(_query, [_keyword, _id],
         function (err, res) {
           if (err) {
             callback(0, "Trash data failed.");
