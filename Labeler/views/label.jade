@@ -25,6 +25,9 @@ html
             a.section(href="/check") check
             div.divider |
           div(class="active section") label
+          div.ui.right.labeled.icon.red.button(style={'position': 'absolute', 'right': '30px'})
+            i.sign.out.icon
+            label Sign out
                 
         - var keywords = {'iPhone6': 'iPhone6', 'MaYun': '马云', 'Marriage': '结婚', 'Interstellar': '星际穿越', 'BaBaQuNar': '爸爸去哪儿', 'DoubleEleven': '双十一', 'DuJiaoShou': '都教授', 'Frozen': '冰雪奇缘', 'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾', 'XiaoLongNv': '小龙女'}
         div.ui.segment
@@ -33,9 +36,6 @@ html
               a.ui.tag.green.label('id'=key)= keywords[key]
             else
               a.ui.tag.label('id'=key)= keywords[key]
-          div.ui.right.labeled.icon.red.button
-            i.sign.out.icon
-            label Sign out
         
           
         script.
@@ -47,7 +47,7 @@ html
             $('.right.icon.red.button').click(function () {
               $.cookie('username', null);
               $.cookie('isSuper', null);
-              window.location = $(location)[0].origin;
+              window.location = $(location)[0].origin + '/index';
             })          
           })
 
@@ -83,16 +83,17 @@ html
                     $('.ui.checkbox').checkbox();
                   })
               div.ui.divider
-                div.row
-                  div#submit.ui.labeled.icon.green.button
-                    i.cloud.upload.icon
-                    p Submit
-                  div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
-                    i.trash.icon
-                    p Trash
-                  div#next.ui.right.labeled.icon.blue.disabled.button
-                    i.right.arrow.icon
-                    p Next
+              br
+              div.row(style={'float': 'right'})
+                div#submit.ui.labeled.icon.green.button
+                  i.cloud.upload.icon
+                  p Submit
+                div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
+                  i.trash.icon
+                  p Trash
+                div#next.ui.right.labeled.icon.blue.disabled.button
+                  i.right.arrow.icon
+                  p Next
 
           div.ui.four.wide.column
             div.ui.card

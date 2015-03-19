@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 
     // check if has login
-    if(res.cookie.user != undefined) {
+    if(res.cookie.username != undefined) {
         console.log(res.cookie.user);
         res.redirect("/label");
     } else {
