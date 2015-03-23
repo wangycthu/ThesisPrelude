@@ -5,19 +5,19 @@ var express = require('express');
 var router = express.Router();
 var Thread = require('./thread');
 var async = require("async");
-// var MysqlClient = require("../models/mysql");
-// var conn = MysqlClient.createConnection();
 var samples = require("../models/samples");
 var user = require("../models/user");
 router.get('/', function (req, res, next) {
 
     // check if login
-    var token = res.cookie.user;
+    var token = res.session.user;
     if (token === undefined) {
         res.redirect("/index");
         return;
     }
-    var _username = req.cookies.username;
+
+    console.log(["session.user",  res.session.username]);
+    var _username = res.session.username;
     var _keyword = req.query.kw;
     // default select
     if (_keyword == null) {
@@ -36,8 +36,8 @@ router.get('/', function (req, res, next) {
                 else {
                     console.log(msg);
                     callback(null, {
-                        "labelCount": msg[0]["labelCount"],
-                        "validateCount": msg[0]["validateCount"]
+                        "labelCount": msg["labelCount"],
+                        "validateCount": msg["validateCount"]
                     });
                 }
             });
@@ -48,10 +48,11 @@ router.get('/', function (req, res, next) {
             if(status != 0) {
                 res.send("发生错误！");
             } else {
+                console.log(["labelCount: ", result['labelCount']]);
                 res.render('label', {
                     title: '微博标注平台',
                     keyword: _keyword,
-                    isSuper: res.cookie.isSuper,
+                    isSuper: res.session.isSuper,
                     username: _username,
                     rows: msg,
                     labelCount: result["labelCount"],

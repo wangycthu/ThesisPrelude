@@ -14,10 +14,12 @@ router.post('/', function (req, res) {
     user.login(_username, _password, function(status, msg){
 
         if (status == 0) {
-            // set user cookie
-            res.cookie.user = sha1("wyc" + _username);
+            // set user session
+            res.session.user = sha1("wyc" + _username);
+            res.session.username = msg["username"];
+
             console.log("msg[username]: " + msg["username"]);
-            res.cookie.isSuper = msg['isSuper'];
+            res.session.isSuper = msg['isSuper'];
         }
         else if(status == 1) {
             console.log("db errors");
@@ -31,6 +33,7 @@ router.post('/', function (req, res) {
 });
 
 router.get('/', function (req, res) {
+    alert("Don't do that");
   res.send("remain to complete.");
 });
 

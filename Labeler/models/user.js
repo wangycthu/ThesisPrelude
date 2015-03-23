@@ -11,7 +11,7 @@ var user = (function(){
 
     that.login = function(username, password, callback) {
         MysqlClient.getUserInfo(username, password, function(status, msg){
-            console.log(status + ", " + msg);
+            console.log([status, msg]);
             callback(status, msg);
         });
     };

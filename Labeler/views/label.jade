@@ -45,9 +45,15 @@ html
               window.location = $(location)[0].origin + '/label?kw=' + $(this).attr('id');
             })
             $('.right.icon.red.button').click(function () {
-              $.cookie('username', null);
-              $.cookie('isSuper', null);
-              window.location = $(location)[0].origin;
+              $.ajax({
+                type: "POST",
+                url: "/logout",
+                data: "",
+                success: function(result) {
+                  alert("logout");
+                  window.location = $(location)[0].origin + "/index";
+                }
+              });
             })          
           })
 

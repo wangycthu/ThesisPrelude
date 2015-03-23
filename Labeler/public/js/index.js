@@ -12,7 +12,10 @@ function showregister() {
 }
 
 
-validateForm = {};
+var validateForm = {};
+
+
+
 
 validateForm.ready = function () {
 
@@ -27,8 +30,7 @@ validateForm.ready = function () {
       .popup()
   ;
 
-  $('.ui.form')
-      .form({
+  $('.ui.form').form({
         username: {
           identifier : 'username',
           rules: [
@@ -51,8 +53,7 @@ validateForm.ready = function () {
             }
           ]
         }
-      },
-      {
+      },{
         onSuccess: function (event) {
           var inputlist = $(event.target).find("input");
           var username = inputlist[0].value;
@@ -68,9 +69,10 @@ validateForm.ready = function () {
                   alert(result.msg);
                 } else {
                   //$.cookie("userId", result.msg._id);
-                  $.cookie("username", username);
-                  $.cookie("isSuper", result.msg['isSuper']);
-                  $.cookie("keyword", "iPhone6");
+                  alert("登陆成功");
+                  // $.cookie("username", username);
+                  // $.cookie("isSuper", result.msg['isSuper']);
+                  // $.cookie("keyword", "iPhone6");
                   if (result.msg['isSuper']) {
                     window.location = $(location)[0].origin + "/overview";
                   } else {
@@ -103,6 +105,8 @@ validateForm.ready = function () {
         }
       });
 };
+
+
 
 $(document)
     .ready(validateForm.ready)

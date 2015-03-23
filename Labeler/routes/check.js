@@ -17,7 +17,7 @@ router.get('/', function(req, res, next){
         console.log("not login");
         res.redirect("/index");
     }
-    var _username = req.cookies.username;
+    var _username = res.cookie.username;
     var _keyword = req.query.kw;
     // default select
     if (_keyword == null) {
@@ -59,19 +59,19 @@ router.get('/', function(req, res, next){
 router.post("/", function(req, res){
 
     console.log("check");
-    var token = res.cookie.user;
+    var token = res.session.user;
     if(token === undefined) {
 
         console.log("not login");
         res.redirect("/index");
     }
-    var _id = res.cookie.threadID;
-    var _keyword = res.cookie.keyword;
+    var _id = res.session.threadID;
+    var _keyword = res.session.keyword;
     var _trash = req.body.trash;
 
     console.log([
-        "id_cookie: ", res.cookie.threadID,
-        "keyword: ", res.cookie.keyword
+        "id_session: ", res.session.threadID,
+        "keyword: ", res.session.keyword
     ]);
     console.log(["_id: ", _id, "keyword: ", _keyword, "_trash: ", _trash]);
     if (_trash == 0) {

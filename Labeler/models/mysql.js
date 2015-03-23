@@ -88,7 +88,7 @@ var MysqlClient = (function() {
             if(err) {
                 console.log("ERROR: getUser");
                 callback(1, "db error");
-            } else callback(0, rows);
+            } else callback(0, rows[0]);
         });
     };
 

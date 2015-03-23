@@ -11,7 +11,7 @@ var config = require("../config");
 router.get('/', function (req, res, next) {
 
     console.log("overview");
-    var _username = req.cookies.username;
+    var _username = res.session.username;
     if (_username === null) {
 
         console.log("not have cookie");
