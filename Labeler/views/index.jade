@@ -23,8 +23,11 @@ html
                 div.ui.icon.input
                   input(type='text', name='login_username')
                   i.user.icon
-              
-              
+              div.field.required
+                label 邮箱
+                div.ui.icon.input
+                  input(name="login_email", type="text")
+                  i.email.icon
               div.field.required
                 label 密码
                 div.ui.icon.input
@@ -37,33 +40,27 @@ html
           div#register.ui.form.segment(style={display: 'none'})
             h4.ui.dividing.header 注册
             a(href='#', onclick='showlogin()', style={float: 'right'}) 直接登录
-            div.two.fields
+            div.field
               div.required.field
                 label 用户名
-              div.ui.icon.input
-                input(type='text', name='register_username')
-                i.user.icon
-              br
-              br
+                div.ui.icon.input
+                  input(type='text', name='register_username')
+                  i.user.icon
               div.required.field
                 label 邮箱
-              div.ui.icon.input
-                input(type='email', name='register_email')
-                i.mail.icon
+                div.ui.icon.input
+                  input(type="text", name="register_email")
+                  i.email.icon
               br
               br
               div.required.field
                 label 密码
-              div.ui.icon.input
-                input(type='password', name='register_password')
-                i.lock.icon
-              br
-              br
+                div.ui.icon.input
+                  input(type='password', name='register_password')
+                  i.lock.icon
               div.required.field
                 label 重复密码
-              div.ui.icon.input
-                input(type='password', name='register_confirm_password')
-                i.lock.icon
-              br
-              br
+                div.ui.icon.input
+                  input(type='password', name='register_confirm_password')
+                  i.lock.icon
               div.ui.green.fluid.submit.button 注册
