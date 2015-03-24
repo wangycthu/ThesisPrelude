@@ -11,7 +11,8 @@ var config = require("../config");
 router.get('/', function (req, res, next) {
 
     var token = req.session.user;
-    if( token === undefined) {
+    var isSuper = req.session.isSuper;
+    if( token === undefined || isSuper === undefined) {
         res.redirect("/index");
         return;
     }
