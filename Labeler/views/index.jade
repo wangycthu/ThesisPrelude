@@ -4,56 +4,58 @@ html
     title= title
     link(rel='stylesheet', href='css/semantic.css')
     link(rel='stylesheet', href='css/style.css')
+    link(rel="stylesheet", href="css/components/form.css")
     script(src='js/jquery.min.js')
     script(src='js/semantic.js')
+    script(src="js/components/form.js")
     script(src='js/index.js')
   body
     block content
       div.ui.page.grid
         div.column
           h1= title
-          form(name="login", id="login", class="ui form segment")
+          div(name="login", id="login", class="ui form segment")
             h4.ui.dividing.header 登录
             a(href='#', onclick='showregister()', style={float: 'right'}) 快速注册
-            div.two.fields
-              div.field
+            div.field
+              div.field.required
                 label 用户名
-              div.ui.icon.input
-                input(name='username', type='text')
-                i.user.icon
-              br
-              br
-              div.field
+                div.ui.icon.input
+                  input(name='login_username', type='text')
+                  i.user.icon
+              
+              
+              div.field.required
                 label 密码
-              div.ui.icon.input
-                input(type='password', name='password')
-                i.lock.icon
+                div.ui.icon.input
+                  input(type='password', name='login_password')
+                  i.lock.icon
               br
               br
               div.ui.blue.fluid.submit.button 登录
 
-          form#register.ui.form.segment(style={display: 'none'})
+          div#register.ui.form.segment(style={display: 'none'})
             h4.ui.dividing.header 注册
             a(href='#', onclick='showlogin()', style={float: 'right'}) 直接登录
             div.two.fields
               div.required.field
                 label 用户名
               div.ui.icon.input
-                input(type='text', name='username')
+                input(type='text', name='register_username')
                 i.user.icon
               br
               br
               div.required.field
                 label 密码
               div.ui.icon.input
-                input(type='password', name='password')
+                input(type='password', name='register_password')
                 i.lock.icon
               br
               br
               div.required.field
                 label 重复密码
               div.ui.icon.input
-                input(type='password', name='password')
+                input(type='password', name='register_confirm_password')
                 i.lock.icon
               br
               br

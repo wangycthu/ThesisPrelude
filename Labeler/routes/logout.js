@@ -10,11 +10,9 @@ var sha1 = require('node-sha1');
 router.post('/', function(req, res){
 
     req.session.user = null;
-    req.seesion.username = null;
-    req.session.isSupar = null;
+    req.session.username = null;
+    req.session.isSuper = null;
 
-    console.log("=============================================");
-    console.log("logout", res.cookie.user);
     res.json({"status": 0, "msg": "signout"});
 });
 

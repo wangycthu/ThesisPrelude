@@ -30,9 +30,9 @@ validateForm.ready = function () {
       .popup()
   ;
 
-  $('.ui.form').form({
-        username: {
-          identifier : 'username',
+  $('.ui.form#login').form({
+        login_username: {
+          identifier : 'login_username',
           rules: [
             {
               type   : 'empty',
@@ -40,8 +40,8 @@ validateForm.ready = function () {
             }
           ]
         },
-        password: {
-          identifier : 'password',
+        login_password: {
+          identifier : 'login_password',
           rules: [
             {
               type   : 'empty',
@@ -65,15 +65,16 @@ validateForm.ready = function () {
               url: '/login',
               data: {'userName': username, 'password': password},
               success: function (result) {
+
+                  // DEBUG
+                  alert(result.msg);
+
                 if (result.status != 0) {
                   alert(result.msg);
                 } else {
-                  //$.cookie("userId", result.msg._id);
-                  alert("登陆成功");
-                  // $.cookie("username", username);
-                  // $.cookie("isSuper", result.msg['isSuper']);
-                  // $.cookie("keyword", "iPhone6");
+
                   if (result.msg['isSuper']) {
+                    // alert($(location)[0].origin);
                     window.location = $(location)[0].origin + "/overview";
                   } else {
                     window.location = $(location)[0].origin + "/label";

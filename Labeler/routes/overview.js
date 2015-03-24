@@ -10,8 +10,14 @@ var config = require("../config");
 
 router.get('/', function (req, res, next) {
 
+    var token = req.session.user;
+    if( token === undefined) {
+        res.redirect("/index");
+        return;
+    }
+
     console.log("overview");
-    var _username = res.session.username;
+    var _username = req.session.username;
     if (_username === null) {
 
         console.log("not have cookie");

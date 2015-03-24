@@ -7,18 +7,20 @@ var Thread = require('./thread');
 var async = require("async");
 var samples = require("../models/samples");
 var user = require("../models/user");
+var session = require("express-session");
 router.get('/', function (req, res, next) {
 
     // check if login
-    var token = res.session.user;
+    var token = req.session.user;
+    console.log(["token", token]);
     if (token === undefined) {
         res.redirect("/index");
         return;
     }
 
-    console.log(["session.user",  res.session.username]);
-    var _username = res.session.username;
-    var _keyword = req.query.kw;
+    console.log(["cookies.user",  req.session.username]);
+    var _username = req.session.username;
+    var _keyword = req.query.kw != "" ? req.query.kw : "iPhone6";
     // default select
     if (_keyword == null) {
         _keyword = 'iPhone6';
@@ -52,7 +54,7 @@ router.get('/', function (req, res, next) {
                 res.render('label', {
                     title: '微博标注平台',
                     keyword: _keyword,
-                    isSuper: res.session.isSuper,
+                    isSuper: req.session.isSuper,
                     username: _username,
                     rows: msg,
                     labelCount: result["labelCount"],
