@@ -112,7 +112,7 @@ validateForm.ready = function () {
           ]
         },
         register_email : {
-            identifier: "login_email",
+            identifier: "register_email",
             rules: [
                 {
                     type: "email",
@@ -124,7 +124,7 @@ validateForm.ready = function () {
                 }
             ]},
         register_password: {
-          identifier : 'login_password',
+          identifier : 'register_password',
           rules: [
             {
               type   : 'empty',
