@@ -52,8 +52,57 @@ validateForm.ready = function () {
               prompt : 'Your password must be at least 3 characters'
             }
           ]
+        },
+        register_username: {
+          identifier: 'register_username',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter a username'
+            }
+          ]
+        },
+        register_email: {
+          identifier: 'register_email',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter your email'
+            },
+            {
+              type: 'email',
+              prompt: 'Please enter a valid email'
+            }
+          ]
+        },
+        register_password: {
+          identifier: 'password',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter a password'
+            },
+            {
+              type: 'length[3]',
+              prompt: 'Your password must be at least 3 characters'
+            }
+          ]
+        },
+        register_confirm_password: {
+          identifier: 'register_confirm_password',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please confirm your password'
+            },
+            {
+              type: 'match[password]',
+              prompt: 'Please verify password matches'
+            }
+          ]
         }
-      },{
+      },
+      {
         onSuccess: function (event) {
           var inputlist = $(event.target).find("input");
           var username = inputlist[0].value;

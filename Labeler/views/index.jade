@@ -2,7 +2,7 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='css/semantic.css')
+    link(rel='stylesheet', href='css/semantic.min.css')
     link(rel='stylesheet', href='css/style.css')
     link(rel="stylesheet", href="css/components/form.css")
     script(src='js/jquery.min.js')
@@ -21,7 +21,7 @@ html
               div.field.required
                 label 用户名
                 div.ui.icon.input
-                  input(name='login_username', type='text')
+                  input(type='text', name='login_username')
                   i.user.icon
               
               
@@ -43,6 +43,13 @@ html
               div.ui.icon.input
                 input(type='text', name='register_username')
                 i.user.icon
+              br
+              br
+              div.required.field
+                label 邮箱
+              div.ui.icon.input
+                input(type='email', name='register_email')
+                i.mail.icon
               br
               br
               div.required.field
