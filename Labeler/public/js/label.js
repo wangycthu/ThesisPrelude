@@ -87,6 +87,6 @@ function confirm_trash()
 {
   var r = confirm("你确定该数据无法标注？");
   if (r == true) {
-    trash()
+    trash();
   }
 }

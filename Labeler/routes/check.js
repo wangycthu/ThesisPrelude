@@ -11,13 +11,13 @@ var Thread = require("./thread");
 router.get('/', function(req, res, next){
 
     console.log("check");
-    var token = res.cookie.user;
+    var token = req.session.user;
     if(token === undefined) {
 
         console.log("not login");
         res.redirect("/index");
     }
-    var _username = req.cookies.username;
+    var _username = req.session.username;
     var _keyword = req.query.kw;
     // default select
     if (_keyword == null) {
@@ -30,9 +30,9 @@ router.get('/', function(req, res, next){
             // set cookies
             if(rows.length) {
 
-                res.cookie.threadID = rows[0]["id"];
+                req.session.threadID = rows[0]["id"];
                 console.log(rows[0]["id"]);
-                res.cookie.keyword = _keyword;
+                req.session.keyword = _keyword;
             }
             res.render("check",
                        {
@@ -59,19 +59,19 @@ router.get('/', function(req, res, next){
 router.post("/", function(req, res){
 
     console.log("check");
-    var token = res.cookie.user;
+    var token = req.session.user;
     if(token === undefined) {
 
         console.log("not login");
         res.redirect("/index");
     }
-    var _id = res.cookie.threadID;
-    var _keyword = res.cookie.keyword;
+    var _id = req.session.threadID;
+    var _keyword = req.session.keyword;
     var _trash = req.body.trash;
 
     console.log([
-        "id_cookie: ", res.cookie.threadID,
-        "keyword: ", res.cookie.keyword
+        "id_session: ", req.session.threadID,
+        "keyword: ", req.session.keyword
     ]);
     console.log(["_id: ", _id, "keyword: ", _keyword, "_trash: ", _trash]);
     if (_trash == 0) {

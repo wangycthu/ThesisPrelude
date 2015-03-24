@@ -12,7 +12,10 @@ function showregister() {
 }
 
 
-validateForm = {};
+var validateForm = {};
+
+
+
 
 validateForm.ready = function () {
 
@@ -27,10 +30,9 @@ validateForm.ready = function () {
       .popup()
   ;
 
-  $('.ui.form')
-      .form({
-        username: {
-          identifier : 'username',
+  $('.ui.form#login').form({
+        login_username: {
+          identifier : 'login_username',
           rules: [
             {
               type   : 'empty',
@@ -38,8 +40,8 @@ validateForm.ready = function () {
             }
           ]
         },
-        password: {
-          identifier : 'password',
+        login_password: {
+          identifier : 'login_password',
           rules: [
             {
               type   : 'empty',
@@ -48,6 +50,54 @@ validateForm.ready = function () {
             {
               type   : 'length[3]',
               prompt : 'Your password must be at least 3 characters'
+            }
+          ]
+        },
+        register_username: {
+          identifier: 'register_username',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter a username'
+            }
+          ]
+        },
+        register_email: {
+          identifier: 'register_email',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter your email'
+            },
+            {
+              type: 'email',
+              prompt: 'Please enter a valid email'
+            }
+          ]
+        },
+        register_password: {
+          identifier: 'password',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter a password'
+            },
+            {
+              type: 'length[3]',
+              prompt: 'Your password must be at least 3 characters'
+            }
+          ]
+        },
+        register_confirm_password: {
+          identifier: 'register_confirm_password',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please confirm your password'
+            },
+            {
+              type: 'match[password]',
+              prompt: 'Please verify password matches'
             }
           ]
         }
@@ -64,14 +114,16 @@ validateForm.ready = function () {
               url: '/login',
               data: {'userName': username, 'password': password},
               success: function (result) {
+
+                  // DEBUG
+                  alert(result.msg);
+
                 if (result.status != 0) {
                   alert(result.msg);
                 } else {
-                  //$.cookie("userId", result.msg._id);
-                  $.cookie("username", username);
-                  $.cookie("isSuper", result.msg['isSuper']);
-                  $.cookie("keyword", "iPhone6");
+
                   if (result.msg['isSuper']) {
+                    // alert($(location)[0].origin);
                     window.location = $(location)[0].origin + "/overview";
                   } else {
                     window.location = $(location)[0].origin + "/label";
@@ -103,6 +155,8 @@ validateForm.ready = function () {
         }
       });
 };
+
+
 
 $(document)
     .ready(validateForm.ready)

@@ -73,7 +73,6 @@ var MysqlClient = (function() {
                 console.log("err: " + err);
                 callback(1, "db error");
             } else if(rows.length == 1){
-                console.log(rows);
                 callback(0, rows[0]);
             } else {
                 console.log("err: " + "no user");
@@ -88,7 +87,7 @@ var MysqlClient = (function() {
             if(err) {
                 console.log("ERROR: getUser");
                 callback(1, "db error");
-            } else callback(0, rows);
+            } else callback(0, rows[0]);
         });
     };
 
@@ -127,7 +126,7 @@ var MysqlClient = (function() {
 
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL) "
-                + " AND (label1 = label2 ))";
+                + " AND (label1 != label2 )";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
                 console.log("ERROR: getCountofSamplesByConflict");
