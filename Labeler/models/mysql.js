@@ -206,7 +206,13 @@ var MysqlClient = (function() {
           if(err) {
             console.log(err);
             callback(1, "DB error");
-          } else callback(0, rows);
+          } else {
+            if (rows.length === 0) {
+              callback(2, "no data");
+            } else {
+              callback(0, rows);
+            }
+          }
         });
   };
 

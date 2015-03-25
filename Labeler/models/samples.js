@@ -35,8 +35,13 @@ var samples = (function(){
                     // get random thread ids
                     var rdmLimit = Math.floor(Math.random() * amount);
                     MysqlClient.getSamplesIDRandomlyByUser(keyword, username, rdmLimit, function(status, rows){
-                        if(status != 0) callback(null, "error");
-                        else {
+                        if(status != 0) {
+                          if (status === 2) {
+                            callback(null, "no data");
+                          } else {
+                            callback(null, "error");
+                          }
+                        } else {
                             callback(null, rows[0]['id']);
                         }
                     });
@@ -44,8 +49,8 @@ var samples = (function(){
             },
 
             function(id, callback) {
-
-                if(id === "error") callback(null, "error");
+                if(id === "no data") callback(null, "no data");
+                else if(id === "error") callback(null, "error");
                 else {
                     MysqlClient.getSamplesByIds(keyword, id, function(status, msg){
                         if(status != 0) callback(1, "error");
@@ -55,9 +60,9 @@ var samples = (function(){
             },
 
         ], function (err, result) {
-            console.log("result");
-            console.log(result);
-            callback(0, result);
+            if (result === "error") callback(1, result);
+            else if (result == "no data") callback(2, result);
+            else callback(0, result);
         });
     };
 

@@ -61,30 +61,31 @@ html
       div.ui.page.grid
         div.row
           div.ui.ten.wide.column
-            div.ui.threaded.comments(id=rows[0]['id'])
-              h3.ui.dividing.header= '关键词：' + keywords[keyword]
-              each row in rows
-                div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
-                  div.content
-                    a.author= row['username']
-                    if row['text']
-                      div.text= row['text']
-                    else
-                      div.text= '转发微博'
-                    div.ui.form
-                      div.grouped.inline.fields
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="positive")
-                            label +1
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="neutral")
-                            label 0
-                        div.field
-                          div.ui.radio.checkbox
-                            input(type="radio", name="sentiment" + row['number'], value="negative")
-                            label -1
+            if rows.length
+              div.ui.threaded.comments(id=rows[0]['id'])
+                h3.ui.dividing.header= '关键词：' + keywords[keyword]
+                each row in rows
+                  div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
+                    div.content
+                      a.author= row['username']
+                      if row['text']
+                        div.text= row['text']
+                      else
+                        div.text= '转发微博'
+                      div.ui.form
+                        div.grouped.inline.fields
+                          div.field
+                            div.ui.radio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="positive")
+                              label +1
+                          div.field
+                            div.ui.radio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="neutral")
+                              label 0
+                          div.field
+                            div.ui.radio.checkbox
+                              input(type="radio", name="sentiment" + row['number'], value="negative")
+                              label -1
                 script.
                   $(document).ready(function () {
                     $('.ui.checkbox').checkbox();
@@ -101,6 +102,13 @@ html
                 div#next.ui.right.labeled.icon.blue.disabled.button
                   i.right.arrow.icon
                   p Next
+            else
+              h3.ui.dividing.header= '关键词：' + keywords[keyword]
+              div.ui.icon.warning.message
+                i.smile.icon
+                div.content
+                  div.header= '这里的数据已经标完了哦！'
+                  p 你可以去看看别的关键词
 
           div.ui.four.wide.column
             div.ui.card

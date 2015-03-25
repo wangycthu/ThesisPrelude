@@ -50,7 +50,20 @@ router.get('/', function (req, res, next) {
       }
       samples.getSamplesByLabels(_keyword, _username, function(status, msg){
         if (status != 0) {
-          res.send("发生错误！");
+          if (status === 2) {
+            console.log(_keyword + ": No data");
+            res.render('label', {
+              title: '微博标注平台',
+              keyword: _keyword,
+              isSuper: req.session.isSuper,
+              username: _username,
+              rows: [],
+              labelCount: result["labelCount"],
+              validateCount: result["validateCount"]
+            });
+          } else {
+            res.send("发生错误！");
+          }
         } else {
           console.log(["labelCount: ", result['labelCount']]);
           res.render('label', {
