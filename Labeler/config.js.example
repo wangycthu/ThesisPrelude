@@ -1,5 +1,6 @@
 module.exports = {
 
+    title: "xxxxx"
     mysql_connect : {
         // mysql setting
         host: "xxxxx",
@@ -8,5 +9,10 @@ module.exports = {
         password: "xxxx",
         database: "xxxx",
         charset: "xxxxx"
-    }
+    },
+    keywordList : [
+        "xxx",
+        "xxx",
+        "xxx"                
+    ]
 };

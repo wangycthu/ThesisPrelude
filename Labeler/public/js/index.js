@@ -112,6 +112,7 @@ validateForm.ready = function () {
           {
             type: "empty",
             prompt: "Please input an  email"
+
           }
         ]
       },
