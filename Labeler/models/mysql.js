@@ -113,8 +113,8 @@ var MysqlClient = (function() {
   that.getCountofSamplesByLabeled = function(keyword, callback) {
 
     var _query = "SELECT COUNT(*) AS amount FROM ?? "
-        + " WHERE ( (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
-        + " AND ( (label1 = label2) OR (valid IS NOT NULL))) ";
+        + " WHERE ( (label1 IS NOT NULL ) AND (label2 IS NOT NULL) AND (label1 <> 2)"
+        + " AND ( (label1 = label2) OR (valid IS NOT NULL) ) ) ";
     conn.query(_query, [keyword] ,function(err, rows, fields){
 
       if(err) {
