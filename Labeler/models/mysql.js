@@ -109,9 +109,9 @@ var MysqlClient = (function() {
     // has labeled
     that.getCountofSamplesByLabeled = function(keyword, callback) {
 
-        var _query = "SELECT COUNT(id) AS amount FROM ?? "
-                + " WHERE ( parent = 0 AND (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
-                + " AND (label1 <> label2))";
+        var _query = "SELECT COUNT(*) AS amount FROM ?? "
+                + " WHERE ( (label1 IS NOT NULL ) AND (label2 IS NOT NULL) "
+                + " AND ( (label1 = label2) OR (valid IS NOT NULL))) ";
         conn.query(_query, [keyword] ,function(err, rows, fields){
 
             if(err) {
@@ -226,7 +226,7 @@ var MysqlClient = (function() {
                 + " WHERE ((label1 IS NOT NULL) "
                 + "AND (label2 IS NOT NULL) "
                 + " AND (label1 != label2 ) "
-                + " AND (valid != NULL))";
+                + " AND (valid IS NULL))";
         conn.query(_query, [keyword],
                   function(err, rows, fields){
                       if(err) {
