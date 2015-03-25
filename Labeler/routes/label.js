@@ -46,6 +46,11 @@ router.get('/', function (req, res, next) {
             });
         }
     ], function (err, result){
+
+        if (err) {
+            res.status(404).end();
+        }
+
         samples.getSamplesByLabels(_keyword, _username, function(status, msg){
 
             if(status != 0) {

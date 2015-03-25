@@ -7,9 +7,10 @@ var user = require("../models/user");
 var session = require("express-session");
 var router = express.Router();
 var sha1 = require('node-sha1');
-
+var config = require("../config");
 router.post('/', function (req, res) {
     var _email = req.body.email;
+    // password security
     var _password = req.body.password;
 
     user.login(_email, _password, function(status, msg){
@@ -18,7 +19,7 @@ router.post('/', function (req, res) {
             // set user session
             req.session.user = sha1("wyc" + msg["username"]);
             req.session.username = msg["username"];
-
+            req.session.secure_proxy = config.secure_proxy;
             console.log(["cookie user", req.session.user]); // debug
             console.log("msg[username]: " + msg["username"]); // debug
             req.session.isSuper = msg['isSuper'];
