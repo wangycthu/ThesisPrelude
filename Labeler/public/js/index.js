@@ -71,9 +71,6 @@ validateForm.ready = function () {
               data: {'email': email, 'password': password},
               success: function (result) {
 
-                  // DEBUG
-                  alert(result.msg);
-
                 if (result.status != 0) {
                   alert(result.msg);
                 } else {
