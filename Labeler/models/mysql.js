@@ -126,7 +126,7 @@ var MysqlClient = (function() {
 
         var _query = "SELECT COUNT(id) AS amount FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) AND (label2 IS NOT NULL) "
-                + " AND (label1 != label2 )";
+                + " AND (label1 != label2 ) AND (valid IS NULL ))";
         conn.query(_query, [keyword], function(err, rows, fields){
             if(err) {
                 console.log("ERROR: getCountofSamplesByConflict");
@@ -242,7 +242,8 @@ var MysqlClient = (function() {
         var _query = "SELECT count(id) as amount FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) "
                 + " AND (label2 IS NOT NULL) "
-                + " AND (label1 != label2 )) ";
+                + " AND (label1 != label2 ) "
+                + " AND (valid IS NULL))";
 
         conn.query(_query, [keyword],
             function(err, rows, fields){
