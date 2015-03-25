@@ -30,40 +30,41 @@ router.get('/', function (req, res, next) {
   var _validateCount = null;
 
   async.waterfall([
+      function (callback) {
+        user.getUser(_username, function (status, msg) {
 
-    function (callback) {
-
-      user.getUser(_username, function (status, msg) {
-
-        if (status != 0) callback(1, "error");
-        else {
-          console.log(msg);
-          callback(null, {
-            "labelCount": msg["labelCount"],
-            "validateCount": msg["validateCount"]
+          if (status != 0) callback(1, "error");
+          else {
+            console.log(msg);
+            callback(null, {
+              "labelCount": msg["labelCount"],
+              "validateCount": msg["validateCount"]
+            });
+          }
+        });
+      }
+    ],
+    function (err, result){
+      if (err) {
+        res.status(404).end();
+      }
+      samples.getSamplesByLabels(_keyword, _username, function(status, msg){
+        if (status != 0) {
+          res.send("发生错误！");
+        } else {
+          console.log(["labelCount: ", result['labelCount']]);
+          res.render('label', {
+            title: '微博标注平台',
+            keyword: _keyword,
+            isSuper: req.session.isSuper,
+            username: _username,
+            rows: msg,
+            labelCount: result["labelCount"],
+            validateCount: result["validateCount"]
           });
         }
       });
-    }
-  ], function (err, result) {
-    samples.getSamplesByLabels(_keyword, _username, function (status, msg) {
-
-      if (status != 0) {
-        res.send("发生错误！");
-      } else {
-        console.log(["labelCount: ", result['labelCount']]);
-        res.render('label', {
-          title: '微博标注平台',
-          keyword: _keyword,
-          isSuper: req.session.isSuper,
-          username: _username,
-          rows: msg,
-          labelCount: result["labelCount"],
-          validateCount: result["validateCount"]
-        });
-      }
     });
-  });
 });
 
 router.post('/', function (req, res) {

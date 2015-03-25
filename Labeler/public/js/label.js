@@ -4,10 +4,8 @@
 
 function submit() {
   var threadID = $('.ui.threaded.comments').attr('id');
-  // var _keyword = $.cookie('keyword');
-  // var _username = $.cookie('username');
-    var _keyword = $(".ui.tag.green.label").attr('id');
-    var _username = $("#username").text();
+  var _keyword = $(".ui.tag.green.label").attr("id");
+  var _username = $("#username").text();
   var labelRecords = {};
 
   $('.comment').each(function () {
@@ -17,10 +15,10 @@ function submit() {
   var _labels = JSON.stringify(labelRecords);
   console.log(_labels);
 
-    // test
-    console.log(_keyword);
-    console.log(threadID);
-    console.log(_username);
+  // test
+  console.log(_keyword);
+  console.log(threadID);
+  console.log(_username);
   $.ajax({
     url: '/label',
     type: 'POST',

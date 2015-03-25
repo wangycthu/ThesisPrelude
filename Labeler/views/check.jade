@@ -99,7 +99,7 @@ html
                                 label +1
                             div.field
                               div.ui.radio.checkbox
-                                input(type="radio", name="sentiment" + row['number'], value="positive")
+                                input(type="radio", name="sentiment" + row['number'], value="neutral")
                                 label 0
                             div.field
                               div.ui.radio.checkbox
@@ -124,16 +124,17 @@ html
                     $('.ui.checkbox').checkbox();
                   })
               div.ui.divider
-                div.row
-                  div#submit.ui.labeled.icon.green.button
-                    i.cloud.upload.icon
-                    p Check
-                  div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
-                    i.trash.icon
-                    p Trash
-                  div#next.ui.right.labeled.icon.blue.disabled.button
-                    i.right.arrow.icon
-                    p Next
+              br
+              div.row(style={'float': 'right'})
+                div#submit.ui.labeled.icon.green.button
+                  i.cloud.upload.icon
+                  p Check
+                div#trash.ui.labeled.icon.red.button(onclick='confirm_trash()')
+                  i.trash.icon
+                  p Trash
+                div#next.ui.right.labeled.icon.blue.disabled.button
+                  i.right.arrow.icon
+                  p Next
           div.ui.four.wide.column
             div.ui.card
               div.content
