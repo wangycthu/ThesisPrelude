@@ -66,7 +66,7 @@ var MysqlClient = (function() {
     // DB operator
     that.getUserInfo = function(email, password, callback) {
 
-        var _query = "SELECT * FROM UserInfo  WHERE email = ? "
+        var _query = "SELECT * FROM UserInfo WHERE email = ? "
                 + " AND password = ? limit 1";
         that.conn.query(_query, [email, password], function(err, rows, fields) {
             if(err) {

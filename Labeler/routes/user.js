@@ -1,7 +1,8 @@
 /**
  * Created by wangyc on 15-2-26.
  */
-
+var config = require("../config");
+var sha1 = require('node-sha1');
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 
@@ -40,20 +41,20 @@ function User(_username, _email,  _password, isSuper) {
             'select * from UserInfo where email=\'' + that.email + '\' limit 1',
             function (err, rows, fields) {
                 if (err) {
-                    callback(0, err);
+                    callback(1, err);
                 }
                 if (rows.length) {
-                    callback(0, 'email has been registered.');
+                    callback(2, 'email has been registered.');
                 } else {
                     var _query = "INSERT INTO UserInfo "
                             + "(username, email, password, isSuper, labelCount, validateCount) values "
                             + " ( ? , ? , ? , default, default, default )";
-                    conn.query( _query, [that.username, that.email, that.password],
+                    conn.query( _query, [that.username, that.email, sha1(config.secure_proxy + that.password)],
                                 function (err, res) {
                                     if (err) {
-                                        callback(0, "save user error.");
+                                        callback(1, "save user error.");
                                     }
-                                    callback(1, that);
+                                    callback(0, that);
                                 }
                               );
                 }

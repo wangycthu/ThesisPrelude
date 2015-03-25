@@ -159,9 +159,6 @@ validateForm.ready = function () {
                 if (result.status != 0) {
                   alert(result.msg);
                 } else {
-                  // $.cookie("username", username);
-                  // $.cookie("isSuper", result.msg.isSuper);
-                  // $.cookie("keyword", "iPhone6");
                   window.location = $(location)[0].origin + "/label";
                 }
               },
