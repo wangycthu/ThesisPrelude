@@ -225,7 +225,8 @@ var MysqlClient = (function() {
         var _query = "SELECT id FROM ?? "
                 + " WHERE ((label1 IS NOT NULL) "
                 + "AND (label2 IS NOT NULL) "
-                + " AND (label1 != label2 )) ";
+                + " AND (label1 != label2 ) "
+                + " AND (valid != NULL))";
         conn.query(_query, [keyword],
                   function(err, rows, fields){
                       if(err) {
@@ -269,6 +270,23 @@ var MysqlClient = (function() {
                   });
     };
 
+    that.updateValid = function(keyword, id, number, valid, callback) {
+
+        var _query = "UPDATE ?? SET valid = ? "
+                + " WHERE id = ? AND number = ? ";
+        conn.query(_query, [keyword, valid, id, number],
+                  function(err, rows, fields){
+                      if(err) {
+
+                          console.log(["err", "ERROR: checkConflict"]);
+                          callback(1, "DB error");
+                      } else {
+
+                          callback(0, "update success!");
+                      }
+                  });
+    };
+
     return {
         createConnection: createConnection,
         getUserInfo: getUserInfo,
@@ -282,7 +300,8 @@ var MysqlClient = (function() {
         getSamplesByIds: getSamplesByIds,
         getIdsByConflict: getIdsByConflict,
         getCountofIdsByConflict: getCountofIdsByConflict,
-        findParentIdByChild: findParentIdByChild
+        findParentIdByChild: findParentIdByChild,
+        updateValid: updateValid
     };
 })();
 
