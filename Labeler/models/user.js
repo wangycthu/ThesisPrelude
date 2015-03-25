@@ -9,8 +9,8 @@ var user = (function(){
 
     var that = this;
 
-    that.login = function(username, password, callback) {
-        MysqlClient.getUserInfo(username, password, function(status, msg){
+    that.login = function(email, password, callback) {
+        MysqlClient.getUserInfo(email, password, function(status, msg){
             console.log([status, msg]);
             callback(status, msg);
         });

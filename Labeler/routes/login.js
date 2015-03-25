@@ -9,14 +9,14 @@ var router = express.Router();
 var sha1 = require('node-sha1');
 
 router.post('/', function (req, res) {
-    var _username = req.body.userName;
+    var _email = req.body.email;
     var _password = req.body.password;
 
-    user.login(_username, _password, function(status, msg){
+    user.login(_email, _password, function(status, msg){
 
         if (status == 0) {
             // set user session
-            req.session.user = sha1("wyc" + _username);
+            req.session.user = sha1("wyc" + msg["username"]);
             req.session.username = msg["username"];
 
             console.log(["cookie user", req.session.user]); // debug
