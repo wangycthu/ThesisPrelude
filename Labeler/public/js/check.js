@@ -45,8 +45,8 @@ function submit() {
                 $('#next').removeClass('disabled');
                 $('#submit').addClass('disabled');
                 $('#trash').addClass('disabled');
-                var labelCount = parseInt($('#labelCount').text());
-                $('#labelCount').text(labelCount + 1);
+                // var labelCount = parseInt($('#labelCount').text());
+                // $('#labelCount').text(labelCount + 1);
             }
         }
     });

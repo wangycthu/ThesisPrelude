@@ -31,15 +31,6 @@ validateForm.ready = function () {
   ;
 
   $('.ui.form#login').form({
-      login_username: {
-          identifier : 'login_username',
-          rules: [
-              {
-              type   : 'empty',
-              prompt : 'Please enter a username'
-            }
-          ]
-        },
       login_password: {
           identifier : 'login_password',
           rules: [
@@ -68,15 +59,16 @@ validateForm.ready = function () {
       },{
         onSuccess: function (event) {
             var inputlist = $.find("#login input");
-            var username = inputlist[0].value;
-            var email = inputlist[1].value;
-            var password = inputlist[2].value;
+            var email = inputlist[0].value;
+            var password = inputlist[1].value;
             var form = $(event.target).attr("id");
           if (form === "login") {
+              console.log(email);
+              console.log(password);
             $.ajax({
               type: 'POST',
               url: '/login',
-              data: {'userName': username, 'password': password},
+              data: {'email': email, 'password': password},
               success: function (result) {
 
                   // DEBUG
@@ -165,16 +157,14 @@ validateForm.ready = function () {
             $.ajax({
               type: 'POST',
               url: '/register',
-              data: {'userName': username, 'password': password},
+              data: {'userName': username, 'email': email, 'password': password},
               success: function (result) {
                 if (result.status != 0) {
                   alert(result.msg);
                 } else {
-                  //$.cookie("userId", result.msg._id);
-                  $.cookie("username", username);
-                  $.cookie("isSuper", result.msg.isSuper);
-                  $.cookie("keyword", "iPhone6");
-
+                  // $.cookie("username", username);
+                  // $.cookie("isSuper", result.msg.isSuper);
+                  // $.cookie("keyword", "iPhone6");
                   window.location = $(location)[0].origin + "/label";
                 }
               },
