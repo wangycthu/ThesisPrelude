@@ -38,6 +38,7 @@ router.get('/', function(req, res, next){
                        {
                            title: config.title,
                            keyword: _keyword,
+                           username: _username,
                            rows: rows,
                            count: amount
                        });
@@ -61,26 +62,28 @@ router.post("/", function(req, res){
     console.log("check");
     var token = req.session.user;
     if(token === undefined) {
-
         console.log("not login");
-        res.redirect("/index");
+        res.json({"status":"1", msg: "not login"});
     }
-    var _id = req.session.threadID;
-    var _keyword = req.session.keyword;
+    var _id = req.body.id;
+    var _keyword = req.body.keyword;
     var _trash = req.body.trash;
 
     console.log([
-        "id_session: ", req.session.threadID,
-        "keyword: ", req.session.keyword
+        "id: ", _id,
+        "keyword: ", _keyword,
+        "trash: ", _trash
     ]);
     console.log(["_id: ", _id, "keyword: ", _keyword, "_trash: ", _trash]);
     if (_trash == 0) {
         var _username = req.body.username;
         var _labels = req.body.labels;
-        var thread = new Thread(_id, _keyword, _username, _labels);
-        thread.save(function (status, msg) {
-            res.json({'status': status, 'msg': msg});
+        // upate the valid of target samples
+        console.log([_username, _labels, "checkConflict"]);
+        samples.checkConflict(_keyword, _id, _username, _labels, function(status, msg){
+            res.json({"status": status, "msg": msg});
         });
+
     } else {
         console.log(_id);
         var thread = new Thread(_id, _keyword);

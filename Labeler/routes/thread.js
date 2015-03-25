@@ -12,13 +12,19 @@ function Thread(_id, _keyword, _username, _labels) {
   this.labels = arguments[3] ? JSON.parse(arguments[3]) : null; //Array
   this.save = function (callback) {
     var that = this;
-    conn.query(
-        'select label1, user1, label2, user2 from ' + that.keyword
-        + ' where id=' + that.id + ' limit 1',
+    var _query1 = 'select label1, user1, label2, user2 from ' + that.keyword + ' where id=' + that.id + ' limit 1';
+    console.log(_query1);
+    conn.query( _query1,
         function (err, rows, fields) {
           if (err) {
             callback(0, err);
+          } else if (!rows.length) {
+            console.log("no item");
+            callback(2, "no item");
           }
+
+          //test
+          console.log(rows);
           var row = rows[0];
           var order = '1';
           if (row['label1'] && row['user1'] != that.username) {
@@ -79,6 +85,11 @@ function Thread(_id, _keyword, _username, _labels) {
         }
     );
   };
+  this.checked = function(callback) {
+
+    var that = this;
+
+  }
 }
 
 module.exports = Thread;

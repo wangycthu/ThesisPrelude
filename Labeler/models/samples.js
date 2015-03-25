@@ -182,6 +182,34 @@ var samples = (function(){
         });
     };
 
+    that.checkConflict = function(keyword, id, username, _labels, callback) {
+        var labels = JSON.parse(_labels);
+        console.log(["labels: ", labels]);
+        for (var number in labels) {
+            console.log("number:", number);
+            var valid = null;
+            switch (labels[number]) {
+            case 'positive':
+                valid = 1;
+                break;
+            case 'neutral':
+                valid = 0;
+                break;
+            case 'negative':
+                valid = -1;
+                break;
+            default:
+                valid = "NULL";
+            }
+
+            // upate database
+            MysqlClient.updateValid(keyword, id, number, valid, function(status, msg){
+                console.log(["upateValid", status, msg]);
+            });
+        }
+        callback(0, "success");
+    };
+
     return {
         // stats
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
@@ -193,7 +221,8 @@ var samples = (function(){
         getSamplesByLabels: getSamplesByLabels,
         // check
         getSamplesByConflict: getSamplesByConflict,
-        getCountofIdsByConflict: getCountofIdsByConflict
+        getCountofIdsByConflict: getCountofIdsByConflict,
+        checkConflict: checkConflict
     };
 })();
 
