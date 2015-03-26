@@ -62,23 +62,16 @@ validateForm.ready = function () {
       var password = inputlist[1].value;
       var form = $(event.target).attr("id");
       if (form === "login") {
-        console.log(email);
-        console.log(password);
         $.ajax({
           type: 'POST',
           url: '/login',
           data: {'email': email, 'password': password},
           success: function (result) {
-
-            // DEBUG
-            alert(result.msg);
-
             if (result.status != 0) {
               alert(result.msg);
             } else {
 
               if (result.msg['isSuper']) {
-                // alert($(location)[0].origin);
                 window.location = $(location)[0].origin + "/overview";
               } else {
                 window.location = $(location)[0].origin + "/label";

@@ -36,10 +36,9 @@ function submit() {
         },
         success: function(result) {
 
-            if(result.status == 0) {
+            if(result.status != 0) {
                 alert(result.msg);
             } else {
-
                 alert("修复成功!");
                 $('.ui.radio.checkbox').checkbox('disable');
                 $('#next').removeClass('disabled');
