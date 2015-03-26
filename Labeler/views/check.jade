@@ -44,9 +44,14 @@ html
             })
             $('.right.icon.red.button').click(function () {
               // sign out
-              $.cookie('username', null);
-              $.cookie('isSuper', null);
-              window.location = $(location)[0].origin;
+              $.ajax({
+                type: "POST",
+                url: "/logout",
+                data: "",
+                success: function(result) {
+                  window.location = $(location)[0].origin + "/index";
+                }
+              });
             })
           })
        div.ui.page.grid

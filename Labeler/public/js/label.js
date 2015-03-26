@@ -13,12 +13,6 @@ function submit() {
     labelRecords[_number] = $(this).find('input:radio:checked').val();
   });
   var _labels = JSON.stringify(labelRecords);
-  console.log(_labels);
-
-  // test
-  console.log(_keyword);
-  console.log(threadID);
-  console.log(_username);
   $.ajax({
     url: '/label',
     type: 'POST',
