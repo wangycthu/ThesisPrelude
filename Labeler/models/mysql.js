@@ -1,15 +1,6 @@
 var config = require("../config");
 var mysql = require('mysql');
-/*
- var conn = mysql.createConnection({
- host: config.mysql_connect.host,
- port: config.mysql_connect.port,
- user: config.mysql_connect.user,
- password: config.mysql_connect.password,
- database: config.mysql_connect.database,
- charset: config.mysql_connect.charset
- });
- */
+var logger = require("../models/logger");
 
 
 
@@ -69,7 +60,7 @@ var MysqlClient = (function() {
     var _query = "SELECT * FROM UserInfo WHERE email = ? limit 1";
     that.conn.query(_query, [email], function(err, rows, fields) {
       if(err) {
-        console.log("err: " + err);
+        logger.info("err: " + err);
         callback(1, "db error");
       } else if(rows.length == 1){
         if (rows[0]['password'] === password) {
@@ -78,7 +69,7 @@ var MysqlClient = (function() {
           callback(3, 'password error.');
         }
       } else {
-        console.log("err: " + "no user");
+        logger.info("err: " + "no user");
         callback(2, "no user");
       }
     });
@@ -88,7 +79,7 @@ var MysqlClient = (function() {
     var _query = "SELECT * FROM UserInfo WHERE username = ? ";
     that.conn.query(_query, [username], function(err, rows, fields){
       if(err) {
-        console.log("ERROR: getUser");
+        logger.info("ERROR: getUser");
         callback(1, "db error");
       } else callback(0, rows[0]);
     });
@@ -102,7 +93,7 @@ var MysqlClient = (function() {
     conn.query( _query, [user.username, user.password, user.isSuper],
         function(err, res) {
           if(err) {
-            console.log("ERROR: insert into UserInfo error!");
+            logger.info("ERROR: insert into UserInfo error!");
             callback(0, "save user error.");
           }
           callback(1, that);
@@ -118,7 +109,7 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword] ,function(err, rows, fields){
 
       if(err) {
-        console.log("ERROR: getCountofSamplesByLabeled");
+        logger.info("ERROR: getCountofSamplesByLabeled");
         callback(1, "DB error");
       } else callback(0, rows[0]);
 
@@ -132,7 +123,7 @@ var MysqlClient = (function() {
         + " AND (label1 != label2 ) AND (valid IS NULL ))";
     conn.query(_query, [keyword], function(err, rows, fields){
       if(err) {
-        console.log("ERROR: getCountofSamplesByConflict");
+        logger.info("ERROR: getCountofSamplesByConflict");
         callback(1, "DB error");
       } else callback(0, rows[0]);
     });
@@ -144,9 +135,9 @@ var MysqlClient = (function() {
         + " WHERE ((label1 IS NULL) OR (label2 IS NULL))";
     conn.query(_query, [keyword], function(err, rows, fields){
       if(err) {
-        console.log("ERROR: getCountofSamplesByUnlabeled");
+        logger.info("ERROR: getCountofSamplesByUnlabeled");
         callback(1, "DB error");
-      } else {console.log(rows);callback(0, rows[0]);}
+      } else {logger.info(rows);callback(0, rows[0]);}
     });
   };
 
@@ -157,7 +148,7 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword], function(err, rows, fields) {
       if(err) {
 
-        console.log("ERROR: getCountofSamplesByTrash");
+        logger.info("ERROR: getCountofSamplesByTrash");
         callback(1, "DB error");
       } else callback(0, rows[0]);
     });
@@ -171,7 +162,7 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword, username, username],
         function(err, rows, fields){
           if (err) {
-            console.log("ERROR: getSamplesByUnlabeled");
+            logger.info("ERROR: getSamplesByUnlabeled");
             callback(1, "DB error");
           } else callback(0, rows);
         });
@@ -187,10 +178,10 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword, username],
         function(err, rows, fields){
           if(err) {
-            console.log(err);
+            logger.info(err);
             callback(1, "DB error");
           } else {
-            console.log(rows);
+            logger.info(rows);
             callback(0, rows[0]);
           }
         });
@@ -204,7 +195,7 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword, username, rdmlimit],
         function(err, rows, fields){
           if(err) {
-            console.log(err);
+            logger.info(err);
             callback(1, "DB error");
           } else {
             if (rows.length === 0) {
@@ -222,8 +213,8 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword, ids],
         function(err, rows, fields){
           if(err) {
-            console.log(err);
-            console.log("ERROR: getSamplesByids");
+            logger.info(err);
+            logger.info("ERROR: getSamplesByids");
             callback(1, "DB error");
           } else callback(0, rows);
         });
@@ -239,8 +230,8 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword],
         function(err, rows, fields){
           if(err) {
-            console.log(err);
-            console.log("ERROR: getIdsByConflict");
+            logger.info(err);
+            logger.info("ERROR: getIdsByConflict");
             callback(1, "DB error");
           } else callback (0, rows);
         });
@@ -257,8 +248,8 @@ var MysqlClient = (function() {
     conn.query(_query, [keyword],
         function(err, rows, fields){
           if(err) {
-            console.log(err);
-            console.log("ERROR: getCountofSamplesByConflict");
+            logger.info(err);
+            logger.info("ERROR: getCountofSamplesByConflict");
             callback(1, "DB error");
           } else callback (0, rows[0]);
         });
@@ -271,7 +262,7 @@ var MysqlClient = (function() {
         function(err, rows, fields){
 
           if(err) {
-            console.log(err);
+            logger.info(err);
             consolg.log("ERROR: findParentIdByChild");
             callback(1, "DB error");
           } else if(!rows.length) {
@@ -288,7 +279,7 @@ var MysqlClient = (function() {
         function(err, rows, fields){
           if(err) {
 
-            console.log(["err", "ERROR: checkConflict"]);
+            logger.info(["err", "ERROR: checkConflict"]);
             callback(1, "DB error");
           } else {
 

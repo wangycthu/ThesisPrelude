@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require("express-session");
+
+var fs = require("fs");
 // All routes define
 var routes = require('./routes/index');
 var labels = require('./routes/label');
@@ -15,7 +17,6 @@ var check = require("./routes/check");
 var logout = require("./routes/logout");
 
 var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: "wyc"}));
+
 // add views
 app.use('/', routes);
 app.use('/index', routes);

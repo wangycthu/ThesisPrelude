@@ -5,6 +5,7 @@ var config = require("../config");
 var sha1 = require('node-sha1');
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
+var logger = require("../models/logger");
 
 function User(_username, _email,  _password, isSuper) {
     this.username = _username;
@@ -19,7 +20,7 @@ function User(_username, _email,  _password, isSuper) {
             function (err, rows, fields) {
 
                 if (err) {
-                    console.log("ERR: " + err);
+                    logger.info("ERR: " + err);
                     callback(0, err);
                 }
                 else if (rows.length) {

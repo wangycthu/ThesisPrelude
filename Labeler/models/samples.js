@@ -6,6 +6,8 @@ var async = require("async");
 var Set = require("collections/set");
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
+var logger = require("../models/logger");
+
 var samples = (function(){
 
     var that = this;
@@ -105,31 +107,31 @@ var samples = (function(){
 
             function(callback) {
                 that.getCountofSamplesByLabeled(keyword, function(status, msg){
-                    console.log("labeled");
+                    logger.info("labeled");
                     callback(null, msg["amount"]);
                 });
             },
             function(callback) {
                 that.getCountofSamplesByConflict(keyword, function(status, msg){
-                    console.log("conflict");
+                    logger.info("conflict");
                     callback(null, msg["amount"]);
 
                 });
             },
             function(callback) {
                 that.getCountofSamplesByTrash(keyword, function(status, msg){
-                    console.log("trash");
+                    logger.info("trash");
                     callback(null, msg["amount"]);
                 });
             },
             function(callback) {
                 that.getCountofSamplesByUnlabeled(keyword, function(status, msg){
-                    console.log("unlabeled");
+                    logger.info("unlabeled");
                     callback(null, msg["amount"]);
                 });
             }],function(err, results) {
 
-                console.log(results);
+                logger.info(results);
                 callback(0, results);
             }
                );
@@ -166,14 +168,14 @@ var samples = (function(){
                 for(var i=0; i<msg.length; i++) {
                     conflictIds.push(msg[i]['id']);
                 }
-                console.log(conflictIds);
+                logger.info(conflictIds);
                 // then change to the set
                 var parentIds = new Set();
                 for (var j=0; j<conflictIds.length; j++) {
                     parentIds.add(conflictIds[j]);
                 }
                 var parentIdsArray = Array.from(parentIds);
-                console.log(parentIdsArray);
+                logger.info(parentIdsArray);
                 if (parentIdsArray.length === 0) {
                     callback(0, []);
                 } else {
@@ -189,9 +191,9 @@ var samples = (function(){
 
     that.checkConflict = function(keyword, id, username, _labels, callback) {
         var labels = JSON.parse(_labels);
-        console.log(["labels: ", labels]);
+        logger.info(["labels: ", labels]);
         for (var number in labels) {
-            console.log("number:", number);
+            logger.info("number:", number);
             var valid = null;
             switch (labels[number]) {
             case 'positive':
@@ -209,7 +211,7 @@ var samples = (function(){
 
             // upate database
             MysqlClient.updateValid(keyword, id, number, valid, function(status, msg){
-                console.log(["upateValid", status, msg]);
+                logger.info(["upateValid", status, msg]);
             });
         }
         callback(0, "success");

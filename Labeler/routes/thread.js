@@ -4,6 +4,8 @@
 
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
+var logger = require("../models/logger");
+
 
 function Thread(_id, _keyword, _username, _labels) {
   this.id = _id;
@@ -13,18 +15,18 @@ function Thread(_id, _keyword, _username, _labels) {
   this.save = function (callback) {
     var that = this;
     var _query1 = 'select label1, user1, label2, user2 from ' + that.keyword + ' where id=' + that.id + ' limit 1';
-    console.log(_query1);
+    logger.info(_query1);
     conn.query( _query1,
         function (err, rows, fields) {
           if (err) {
             callback(0, err);
           } else if (!rows.length) {
-            console.log("no item");
+            logger.info("no item");
             callback(2, "no item");
           }
 
           //test
-          console.log(rows);
+          logger.info(rows);
           var row = rows[0];
           var order = '1';
           if (row['label1'] && row['user1'] != that.username) {
@@ -70,7 +72,7 @@ function Thread(_id, _keyword, _username, _labels) {
 
   this.trash = function (callback) {
     var that = this;
-    console.log([
+    logger.info([
       "in the tread:,", _keyword,
       "id: ", _id
     ]);

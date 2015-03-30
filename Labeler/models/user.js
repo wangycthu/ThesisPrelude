@@ -6,13 +6,15 @@ var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 var sha1 = require("node-sha1");
 var config = require("../config");
+var logger = require("../models/logger");
+
 var user = (function(){
 
     var that = this;
 
     that.login = function(email, password, callback) {
         MysqlClient.getUserInfo(email, sha1(config.secure_proxy + password), function(status, msg){
-            console.log([status, msg]);
+            logger.info([status, msg]);
             callback(status, msg);
         });
     };

@@ -8,6 +8,8 @@ var session = require("express-session");
 var router = express.Router();
 var sha1 = require('node-sha1');
 var config = require("../config");
+var logger = require("../models/logger");
+
 router.post('/', function (req, res) {
     var _email = req.body.email;
     // password security
@@ -20,13 +22,13 @@ router.post('/', function (req, res) {
             req.session.user = sha1("wyc" + msg["username"]);
             req.session.username = msg["username"];
             req.session.secure_proxy = config.secure_proxy;
-            console.log(["cookie user", req.session.user]); // debug
-            console.log("msg[username]: " + msg["username"]); // debug
+            logger.info(["cookie user", req.session.user]); // debug
+            logger.info("msg[username]: " + msg["username"]); // debug
             req.session.isSuper = msg['isSuper'];
         } else if(status == 1) {
-            console.log("db errors");
+            logger.info("db errors");
         } else if (status == 2) {
-            console.log("no users");
+            logger.info("no users");
         } else {
             // no logic here
         }

@@ -6,22 +6,23 @@ var async = require("async");
 var router = express.Router();
 var samples = require("../models/samples");
 var config = require("../config");
-
+var logger = require("../models/logger");
 
 router.get('/', function (req, res, next) {
 
     var token = req.session.user;
     var isSuper = req.session.isSuper;
     if( token === undefined || isSuper === undefined) {
+        logger.info("cannot get in the admin page");
         res.redirect("/index");
         return;
     }
 
-    console.log("overview");
+    logger.info("overview");
     var _username = req.session.username;
     if (_username === null) {
 
-        console.log("not have cookie");
+        logger.info("not have cookie");
         res.redirect("/index");
     }
 
@@ -35,12 +36,6 @@ router.get('/', function (req, res, next) {
         });
     }, function(err, results){
 
-        /**
-        console.log(results);
-        res.render("overview",
-                   {title: config.title,
-                    statsData: results});
-         **/
         var statsData = [];
         var categories = {
             0: "Labeled",
@@ -58,7 +53,7 @@ router.get('/', function (req, res, next) {
                 statsData[i]["data"].push(results[j][i]);
             }
         };
-        console.log(statsData);
+        logger.info(statsData);
         res.render("overview",
                    {title: config.title,
                     keywords: keywords,
