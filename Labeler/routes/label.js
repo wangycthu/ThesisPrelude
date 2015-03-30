@@ -8,17 +8,19 @@ var async = require("async");
 var samples = require("../models/samples");
 var user = require("../models/user");
 var session = require("express-session");
+var logger = require("../models/logger");
 router.get('/', function (req, res, next) {
 
   // check if login
   var token = req.session.user;
+    logger.info(["token,", token]);
   console.log(["token", token]);
   if (token === undefined) {
     res.redirect("/index");
     return;
   }
 
-  console.log(["cookies.user", req.session.username]);
+  logger.info(["cookies.user", req.session.username]);
   var _username = req.session.username;
   var _keyword = req.query.kw != "" ? req.query.kw : "iPhone6";
 
@@ -35,10 +37,10 @@ router.get('/', function (req, res, next) {
 
           if (status != 0) callback(1, "error");
           else {
-            console.log(msg);
-            callback(null, {
-              "labelCount": msg["labelCount"],
-              "validateCount": msg["validateCount"]
+              logger.info(msg);
+              callback(null, {
+                  "labelCount": msg["labelCount"],
+                  "validateCount": msg["validateCount"]
             });
           }
         });
@@ -51,7 +53,7 @@ router.get('/', function (req, res, next) {
       samples.getSamplesByLabels(_keyword, _username, function(status, msg){
         if (status != 0) {
           if (status === 2) {
-            console.log(_keyword + ": No data");
+            logger.info(_keyword + ": No data");
             res.render('label', {
               title: '微博标注平台',
               keyword: _keyword,
@@ -65,15 +67,15 @@ router.get('/', function (req, res, next) {
             res.send("发生错误！");
           }
         } else {
-          console.log(["labelCount: ", result['labelCount']]);
-          res.render('label', {
-            title: '微博标注平台',
-            keyword: _keyword,
-            isSuper: req.session.isSuper,
-            username: _username,
-            rows: msg,
-            labelCount: result["labelCount"],
-            validateCount: result["validateCount"]
+            logger.info(["labelCount: ", result['labelCount']]);
+            res.render('label', {
+                title: '微博标注平台',
+                keyword: _keyword,
+                isSuper: req.session.isSuper,
+                username: _username,
+                rows: msg,
+                labelCount: result["labelCount"],
+                validateCount: result["validateCount"]
           });
         }
       });
@@ -85,7 +87,7 @@ router.post('/', function (req, res) {
   console.log("label post");
   var token = req.session.user;
   if (token ===  undefined) {
-    console.log("not login");
+    logger.info("not login");
     res.redirect("/index");
   }
 
