@@ -14,5 +14,9 @@ module.exports = {
         "xxx",
         "xxx",
         "xxx"                
-    ]
+    ],
+    secure_proxy: "xxxx",
+
+    logger_file: "./../daemon.log",
+    logger_exceptions_file: "./../daemon_exceptions.log"
 };
