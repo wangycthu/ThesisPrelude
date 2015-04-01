@@ -86,6 +86,7 @@ router.post("/", function(req, res){
 
     } else {
         logger.info(_id);
+        logger.info(["trash"]);
         var thread = new Thread(_id, _keyword);
         thread.trash(function (status, msg) {
             res.json({'status': status, 'msg': msg});
