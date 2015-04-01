@@ -10,7 +10,8 @@ var logger = new (winston.Logger) ({
         new (winston.transports.Console)({ json: false, timestamp: true }),
         new winston.transports.File({ filename: config.logger_exceptions_file, json: false })
     ],
-    exitOnError: false
+    exitOnError: false,
+    level: "debug"
 });
 
 module.exports = logger;
