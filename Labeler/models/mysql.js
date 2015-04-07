@@ -21,15 +21,33 @@ var MysqlClient = (function() {
 
   that.createConnection = function () {
 
-    var conn = mysql.createConnection({
-      host: config.mysql_connect.host,
-      port: config.mysql_connect.port,
-      user: config.mysql_connect.user,
-      password: config.mysql_connect.password,
-      database: config.mysql_connect.database,
-      charset: config.mysql_connect.charset
-    });
-    that.conn = conn;
+      var conn = mysql.createConnection({
+          host: config.mysql_connect.host,
+          port: config.mysql_connect.port,
+          user: config.mysql_connect.user,
+          password: config.mysql_connect.password,
+          database: config.mysql_connect.database,
+          charset: config.mysql_connect.charset
+      });
+      that.conn = conn;
+
+      conn.connect(function(err){
+
+          if(err) {
+              logger.info("Connection error!");
+              setTimeout(that.createConnection, 2000);
+          }
+      });
+
+      conn.on("error", function(err){
+
+          if(err.code === "PROTOCOL_CONNECTION_LOST") {
+              that.createConnection();
+          } else {
+              logger.error("DB CONNECT ERROR!!!");
+          }
+      });
+
     return that.conn;
   };
 
@@ -69,8 +87,8 @@ var MysqlClient = (function() {
           callback(3, 'password error.');
         }
       } else {
-        logger.info("err: " + "no user");
-        callback(2, "no user");
+          logger.info("err: " + "no user");
+          callback(2, "no user");
       }
     });
   };
@@ -271,7 +289,7 @@ var MysqlClient = (function() {
         });
   };
 
-  that.updateValid = function(keyword, id, number, valid, callback) {
+    that.updateValid = function(keyword, id, number, valid, callback) {
 
     var _query = "UPDATE ?? SET valid = ? "
         + " WHERE id = ? AND number = ? ";
@@ -288,21 +306,39 @@ var MysqlClient = (function() {
         });
   };
 
+    that.getCountofValidByUser = function(keyword, username, callback) {
+
+        var _query = "SELECT COUNT(id) as amount FROM ?? "
+                + " WHERE (user1 = ? or user2 = ? ) "
+                + " AND ( valid IS NOT NULL )";
+
+        conn.query(_query, [keyword, username], function(err, rows, fields){
+            if(err) {
+                logger.info([err, "ERROR: getCountofValidByUser"]);
+                callback(1, "DB ERROR");
+            } else {
+
+                callback(0, rows[0]);
+            }
+        });
+    };
+
   return {
-    createConnection: createConnection,
-    getUserInfo: getUserInfo,
-    getUser: getUser,
-    getCountofSamplesByLabeled: getCountofSamplesByLabeled,
-    getCountofSamplesByConflict: getCountofSamplesByConflict,
-    getCountofSamplesByUnlabeled: getCountofSamplesByUnlabeled,
-    getCountofSamplesByTrash: getCountofSamplesByTrash,
-    getCountofParentsByUser: getCountofParentsByUser,
-    getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
-    getSamplesByIds: getSamplesByIds,
-    getIdsByConflict: getIdsByConflict,
-    getCountofIdsByConflict: getCountofIdsByConflict,
-    findParentIdByChild: findParentIdByChild,
-    updateValid: updateValid
+      createConnection: createConnection,
+      getUserInfo: getUserInfo,
+      getUser: getUser,
+      getCountofSamplesByLabeled: getCountofSamplesByLabeled,
+      getCountofSamplesByConflict: getCountofSamplesByConflict,
+      getCountofSamplesByUnlabeled: getCountofSamplesByUnlabeled,
+      getCountofSamplesByTrash: getCountofSamplesByTrash,
+      getCountofParentsByUser: getCountofParentsByUser,
+      getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
+      getSamplesByIds: getSamplesByIds,
+      getIdsByConflict: getIdsByConflict,
+      getCountofIdsByConflict: getCountofIdsByConflict,
+      findParentIdByChild: findParentIdByChild,
+      updateValid: updateValid,
+      getCountofValidByUser: getCountofValidByUser
   };
 })();
 
