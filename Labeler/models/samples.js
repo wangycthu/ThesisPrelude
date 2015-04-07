@@ -7,6 +7,7 @@ var Set = require("collections/set");
 var MysqlClient = require("../models/mysql");
 var conn = MysqlClient.createConnection();
 var logger = require("../models/logger");
+var config = require("../config");
 
 var samples = (function(){
 
@@ -217,6 +218,26 @@ var samples = (function(){
         callback(0, "success");
     };
 
+    that.updateUserValidCount = function(username, callback) {
+
+        var keywordList = config.keywordList;
+        var validNumber = 0;
+
+        async.eachSeries(keywordList, function(keyword, next){
+
+            MysqlClient.getCountofValidByUser(keyword, username, function(status, msg){
+                if (status != 0) callback(status, msg);
+                validNumber = validNumber + msg['amount'];
+            });
+        }, function(err){
+
+            if(err) {
+                logger.info("updateUserValidCount: error");
+                callback(1, "error");
+            } else callback(0, validNumber);
+        });
+    };
+
     return {
         // stats
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
@@ -229,7 +250,8 @@ var samples = (function(){
         // check
         getSamplesByConflict: getSamplesByConflict,
         getCountofIdsByConflict: getCountofIdsByConflict,
-        checkConflict: checkConflict
+        checkConflict: checkConflict,
+        updateUserValidCount: updateUserValidCount
     };
 })();
 
