@@ -67,7 +67,7 @@ html
                 each row in rows
                   div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
                     div.content
-                      a.author= row['username']
+                      a.author(style="color:#337b92")= row['username']
                       if row['text']
                         div.text= row['text']
                       else
