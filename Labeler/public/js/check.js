@@ -8,7 +8,6 @@ function submit() {
     var _keyword = $(".ui.tag.green.label").attr("id");
     var _username = $("#username").text();
     var labelRecords = {};
-    console.log(_if_related);
     $(".comment").each(function(){
         var _number = $(this).attr("id").toString();
         var input = $(this).find("input:radio:enabled:checked").val();
