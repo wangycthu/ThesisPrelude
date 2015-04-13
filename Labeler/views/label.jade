@@ -67,7 +67,7 @@ html
                 each row in rows
                   div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
                     div.content
-                      a.author= row['username']
+                      a.author(style="color:#337b92")= row['username']
                       if row['text']
                         div.text= row['text']
                       else
@@ -90,6 +90,21 @@ html
                   $(document).ready(function () {
                     $('.ui.checkbox').checkbox();
                   })
+              div.ui.divider
+              br
+              div.section
+                p(style="color:green") 您认为该序列中上下文信息是否有助于您对情感方向的判断？
+                div.ui.form
+                  div.grouped.inline.fields
+                    div.field
+                      div.ui.radio.checkbox
+                        input(type="radio", id="if_related" name="if_related", value="1")
+                        label 有
+                    div.field
+                      div.ui.radio.checkbox
+                        input(type="radio", id="if_related" name="if_related", value="0")
+                        label 没有
+                        
               div.ui.divider
               br
               div.row(style={'float': 'right'})

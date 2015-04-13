@@ -84,29 +84,30 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res) {
 
-  console.log("label post");
-  var token = req.session.user;
-  if (token ===  undefined) {
-    logger.info("not login");
-    res.redirect("/index");
-  }
+    console.log("label post");
+    var token = req.session.user;
+    if (token ===  undefined) {
+        logger.info("not login");
+        res.redirect("/index");
+    }
 
-  var _id = req.body.id;
-  var _keyword = req.body.keyword;
-  var _trash = req.body.trash;
-  if (_trash == 0) {
-    var _username = req.body.username;
-    var _labels = req.body.labels;
-    var thread = new Thread(_id, _keyword, _username, _labels);
-    thread.save(function (status, msg) {
-      res.json({'status': status, 'msg': msg});
-    });
-  } else {
-    var thread = new Thread(_id, _keyword);
-    thread.trash(function (status, msg) {
-      res.json({'status': status, 'msg': msg});
-    });
-  }
+    var _id = req.body.id;
+    var _keyword = req.body.keyword;
+    var _trash = req.body.trash;
+    var _if_related = req.body.if_related;
+    if (_trash == 0) {
+        var _username = req.body.username;
+        var _labels = req.body.labels;
+        var thread = new Thread(_id, _keyword, _username, _labels, _if_related);
+        thread.save(function (status, msg) {
+            res.json({'status': status, 'msg': msg});
+        });
+    } else {
+        var thread = new Thread(_id, _keyword);
+        thread.trash(function (status, msg) {
+            res.json({'status': status, 'msg': msg});
+        });
+    }
 });
 
 module.exports = router;
