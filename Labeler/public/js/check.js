@@ -8,7 +8,7 @@ function submit() {
     var _keyword = $(".ui.tag.green.label").attr("id");
     var _username = $("#username").text();
     var labelRecords = {};
-
+    console.log(_if_related);
     $(".comment").each(function(){
         var _number = $(this).attr("id").toString();
         var input = $(this).find("input:radio:enabled:checked").val();
@@ -16,8 +16,7 @@ function submit() {
             return true; // that means continue
         }
         labelRecords[_number] = input;
-    }
-                      );
+    });
     // labels format: {"1": "positive", "2": "positive"}
     var _labels = JSON.stringify(labelRecords);
     console.log(_labels);

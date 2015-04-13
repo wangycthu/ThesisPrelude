@@ -7,11 +7,12 @@ var conn = MysqlClient.createConnection();
 var logger = require("../models/logger");
 
 
-function Thread(_id, _keyword, _username, _labels) {
+function Thread(_id, _keyword, _username, _labels, _if_related) {
   this.id = _id;
   this.keyword = _keyword;
   this.username = arguments[2] ? arguments[2] : null;
   this.labels = arguments[3] ? JSON.parse(arguments[3]) : null; //Array
+    this.if_related = _if_related;
   this.save = function (callback) {
     var that = this;
     var _query1 = 'select label1, user1, label2, user2 from ' + that.keyword + ' where id=' + that.id + ' limit 1';
@@ -45,18 +46,25 @@ function Thread(_id, _keyword, _username, _labels) {
               case 'negative':
                 label = -1;
                 break;
-              default:
+            default:
                 label = 'NULL';
             }
+
+
             conn.query(
-                'update ' + that.keyword + ' set label' + order + '=' + label
-                + ', user' + order + '=\'' + that.username + '\' where id=' +
+                'update ' + that.keyword
+                    + ' set label' + order + '=' + label
+                    + ', user' + order + '=\'' + that.username + '\' '
+                    + ', ifrelated= \'' + that.if_related + '\' '
+                    + ' where id=' +
                 that.id + ' and number=' + number,
                 function (err, res) {
                   if (err) {
+
                     callback(0, "Update table " + that.keyword + " error.");
                   }
                 });
+
           }
           conn.query(
               'update UserInfo set labelCount=labelCount+1 where username=\'' + that.username + '\'',
