@@ -7,7 +7,7 @@ function submit() {
   var _keyword = $(".ui.tag.green.label").attr("id");
   var _username = $("#username").text();
   var labelRecords = {};
-  var _if_related = $("#if_related").val();
+  var _if_related = $("input:checked[name='if_related']").val();
     console.log(_if_related);
   $('.comment').each(function () {
     var _number = $(this).attr('id').toString();
@@ -27,7 +27,7 @@ function submit() {
           },
     success: function (result) {
       if (result.status == 0) {
-        alert(result.msg);
+        alert("some errors happened!");
       } else {
         alert('标注成功！');
         $('.ui.radio.checkbox').checkbox('disable');
