@@ -30,7 +30,7 @@ function Thread(_id, _keyword, _username, _labels, _if_related) {
           logger.info(rows);
           var row = rows[0];
           var order = '1';
-          if (row['label1'] && row['user1'] != that.username) {
+          if (row['user1'] != null && row['user1'] != that.username) {
             order = '2';
           }
 
@@ -55,7 +55,7 @@ function Thread(_id, _keyword, _username, _labels, _if_related) {
                 'update ' + that.keyword
                     + ' set label' + order + '=' + label
                     + ', user' + order + '=\'' + that.username + '\' '
-                    + ', ifrelated= \'' + that.if_related + '\' '
+                    + ', ifrelated' + order +'= \'' + that.if_related + '\' '
                     + ' where id=' +
                 that.id + ' and number=' + number,
                 function (err, res) {
