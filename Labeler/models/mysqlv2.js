@@ -6,21 +6,17 @@ var MysqlClient = (function() {
 
 
     var that = this;
-    that.pool = null;
+    that.pool =  mysql.createPool({
 
-    that.createPool = function() {
+        host: config.mysql_connect.host,
+        port: config.mysql_connect.port,
+        user: config.mysql_connect.user,
+        password: config.mysql_connect.password,
+        database: config.mysql_connect.database,
+        charset: config.mysql_connect.charset,
+        connectionLimit: 200
+    });
 
-        that.pool =  mysql.createPool({
-
-            host: config.mysql_connect.host,
-            port: config.mysql_connect.port,
-            user: config.mysql_connect.user,
-            password: config.mysql_connect.password,
-            database: config.mysql_connect.database,
-            charset: config.mysql_connect.charset,
-            connectionLimit: 200
-        });
-    };
 
 
     // DB operator
@@ -220,7 +216,7 @@ var MysqlClient = (function() {
         });
     };
 
-    that.getSamplesByIds = function(topicid, ids, callback){
+    that.getSamplesByGroupIds = function(topicid, ids, callback){
 
         that.pool.getConnection(function(err, connection){
 
@@ -354,7 +350,7 @@ var MysqlClient = (function() {
         getCountofSamplesByTrash: getCountofSamplesByTrash,
         getCountofParentsByUser: getCountofParentsByUser,
         getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
-        getSamplesByIds: getSamplesByIds,
+        getSamplesByGroupIds: getSamplesByGroupIds,
         getIdsByConflict: getIdsByConflict,
         getCountofIdsByConflict: getCountofIdsByConflict,
         findParentIdByChild: findParentIdByChild,
