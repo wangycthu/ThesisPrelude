@@ -1,6 +1,7 @@
 #chart-container{
-  min-width: 310px;
-  max-width: 800px;
-  min-height: 2500px;
-  margin: 0 auto;
+    min-width: 310px;
+    max-width: 800px;
+    height: auto;
+    min-height: 800px;
+    margin: 0 auto;
 }

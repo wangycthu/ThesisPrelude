@@ -37,9 +37,11 @@ router.get('/', function (req, res, next) {
     var topicnames = []
     logger.info(["topic_items:", topic_items])
     for (var item in topic_items) {
-        console.log(item);
-        topicids.push(item.name);
-        topicnames.push(item.value);
+        // console.log(item);
+        // console.log("name:", name);
+        // console.log("value:", value);
+        topicids.push(item);
+        topicnames.push(topic_items[item]);
 
     }
     async.map(topicids, function(topicid, callback){
