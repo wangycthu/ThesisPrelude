@@ -44,17 +44,17 @@ var samples = (function(){
                             callback(null, "error");
                           }
                         } else {
-                            callback(null, rows[0]['groupid']);
+                            callback(null, rows[0]['threadid']);
                         }
                     });
                 }
             },
 
-            function(groupid, callback) {
-                if(id === "no data") callback(null, "no data");
-                else if(id === "error") callback(null, "error");
+            function(threadid, callback) {
+                if(threadid === "no data") callback(null, "no data");
+                else if(threadid === "error") callback(null, "error");
                 else {
-                    mysql_conn.getSamplesByGroupIds(topicid, groupid, function(status, msg){
+                    mysql_conn.getSamplesByGroupIds(topicid, threadid, function(status, msg){
                         if(status != 0) callback(1, "error");
                         else callback(null, msg);
                     });
@@ -148,7 +148,7 @@ var samples = (function(){
             if (status != 0) callback(1, "error");
             else callback(0, row['amount']);
         });
-    }
+    };
 
     that.getSamplesByConflict = function(topicid, callback) {
         /*
@@ -166,7 +166,7 @@ var samples = (function(){
                 // transfer
                 var conflictIds = [];
                 for(var i=0; i<msg.length; i++) {
-                    conflictIds.push(msg[i]['groupid']);
+                    conflictIds.push(msg[i]['threadid']);
                 }
                 logger.info(conflictIds);
                 // then change to the set
@@ -189,7 +189,7 @@ var samples = (function(){
         });
     };
 
-    that.checkConflict = function(topicid, groupid, username, _labels, callback) {
+    that.checkConflict = function(topicid, threadid, username, _labels, callback) {
         var labels = JSON.parse(_labels);
         logger.info(["labels: ", labels]);
         for (var number in labels) {
@@ -210,7 +210,7 @@ var samples = (function(){
             }
 
             // upate database
-            mysql_conn.updateValid(topicid, groupid, number, valid, function(status, msg){
+            mysql_conn.updateValid(topicid, threadid, number, valid, function(status, msg){
                 logger.info(["upateValid", status, msg]);
             });
         }

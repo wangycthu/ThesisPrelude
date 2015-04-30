@@ -4,11 +4,15 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='css/semantic.min.css')
+    link(rel='stylesheet', href='thirdparty/semantic-ui/semantic.css')
     link(rel='stylesheet', href='css/style.css')
     script(src='js/jquery.min.js')
-    script(src='js/semantic.min.js')
-    script(src='js/check.js')
+    script(src='js/jquery.session.js')
+    script(src='thirdparty/semantic-ui/semantic.js')
+    script(src='js/label.js')
+    
+    link(rel="stylesheet" type="text/css" href="thirdparty/semantic-ui/dropdown.css")
+    script(src="thirdparty/semantic-ui/dropdown.js" type="text/javascript")
   body
     block content
       div.ui.segment
@@ -24,22 +28,34 @@ html
           div(class="active section") check
           div.divider |
           a.section(href="/label") label
+          div.section >
+          div.section(id="topic_val", key=topicid, val=topicname)= topicname
           div.ui.right.labeled.icon.red.button(style={'position': 'absolute', 'right': '30px'})
             i.sign.out.icon
             label Sign out
 
-        - var keywords = {'Interstellar': '星际穿越', 'BaBaQuNar': '爸爸去哪儿', 'Frozen': '冰雪奇缘', 'RunningMan': '奔跑吧兄弟', 'WuMai': '雾霾', 'NewsEvent': '新闻事件'}
         div.ui.segment
-          - for (var key in keywords)
-            if key == keyword
-              a.ui.tag.green.label('id'=key)= keywords[key]
-            else
-              a.ui.tag.label('id'=key)= keywords[key]
+          each keyword_list, topic_name in topic_list
+            div.ui.dropdown.link.item(style="margin-left:10px;")
+              div.text= topic_name
+              i.dropdown.icon
+              div.menu
+                div.header= topic_name
+                each keyword, id in keyword_list
+                   a.item.topic_item(href="/check?topicid="+id+"&topicname="+keyword,  "id"=id, "name"=keyword)= keyword
+        //div.ui.segment
+        //  - for (var key in keywords)
+        //    if key == keyword
+        //      a.ui.tag.green.label('id'=key)= keywords[key]
+        //    else
+        //      a.ui.tag.label('id'=key)= keywords[key]
 
         script.
           $(document).ready(function () {
+            $('.ui.dropdown').dropdown();
+
             $('.ui.tag.label').click(function () {
-              $.cookie('keyword', $(this).attr('id'));
+              $.cookie('topicid', $(this).attr('id'));
               window.location = $(location)[0].origin + '/check?kw=' + $(this).attr('id');
             })
             $('.right.icon.red.button').click(function () {
@@ -58,10 +74,10 @@ html
         div.row
           div.ui.ten.wide.column
               if rows.length
-                div.ui.threaded.comments(id=rows[0]['id'])
+                div.ui.threaded.comments(id=rows[0]['threadid'])
               else
                 div.ui.threaded.comments
-              h3.ui.dividing.header= '关键词：' + keywords[keyword]
+              h3.ui.dividing.header= '关键词：' + topicname
               each row in rows
                 div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
                   div.content

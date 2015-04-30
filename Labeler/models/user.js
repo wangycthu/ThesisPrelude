@@ -26,9 +26,26 @@ var user = (function(){
             else callback(0, msg);
         });
     };
+
+    that.register = function(username, email, password, isSuper, callback){
+
+        mysql_conn.getUserByEmail(email, function(status, rows){
+
+            if(rows.length) callback("3", "this email has registed!");
+            else {
+                password = sha1(config.secure_proxy + password);
+                mysql_conn.insertUser(username, email, password, isSuper, function(status, msg){
+                    callback(status, msg);
+                });
+            } 
+        });
+        
+    }
+    
     return {
         login: login,
-        getUser: getUser
+        getUser: getUser,
+        register: register
     };
 
 })();

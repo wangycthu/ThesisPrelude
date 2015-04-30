@@ -60,21 +60,36 @@ var mysql_conn = (function() {
         });
     };
 
-    that.insertUser = function (user) {
+    that.getUserByEmail = function(email, callback) {
+        pool.getConnection(function(err, connection){
+            var _query = "select * from UserInfo where email = ? ";
+            connection.query(_query, [email], function(err, rows, fields){
+                connection.release();
+                if(err) {
+                    logger.info("ERROR: getUserByEmail");
+                    callback(1, "db error");
+                } else callback(0, rows);
+            });
+
+        });
+    };
+
+    that.insertUser = function (username, email, password, isSuper, callback) {
 
         pool.getConnection(function(err, connection){
 
-            var _query = "INSERT INTO UserInfo "
-                    + " values(?, ?, ?, default, default, defualt)";
+            var _query = "INSERT INTO UserInfo (username, email, password, " 
+                            + " isSuper, labelCount, validateCount ) "
+                            + " values(?, ?, ?, ?, default, default)";
             connection.query( _query,
-                              [user.username, user.password, user.isSuper],
+                              [username, email, password, isSuper],
                               function(err, res) {
                                   connection.release();
                                   if(err) {
                                       logger.info("ERROR: insert into UserInfo error!");
-                                      callback(0, "save user error.");
+                                      callback(1, "save user error.");
                                   }
-                                  callback(1, that);
+                                  callback(0, null);
                               });
         });
     };
@@ -417,6 +432,8 @@ var mysql_conn = (function() {
     return {
         getUserInfo: getUserInfo,
         getUser: getUser,
+        getUserByEmail: getUserByEmail,
+        insertUser: insertUser,
         getCountofSamplesByLabeled: getCountofSamplesByLabeled,
         getCountofSamplesByConflict: getCountofSamplesByConflict,
         getCountofSamplesByUnlabeled: getCountofSamplesByUnlabeled,
