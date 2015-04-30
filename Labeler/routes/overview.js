@@ -27,11 +27,24 @@ router.get('/', function (req, res, next) {
     }
 
     var statsData = [];
-    var keywords = config.keywordList;
+    // var keywords = config.keywordList;
+    // var topicid = req.query.topicid != undefined ? req.query.topicid : 8;
+    var topicname = req.query.topicname != undefined ? req.query.topicname : "影视剧";
+    var topic_list = config.topic_list;
+    // get sub-topics by topicname
+    var topic_items = topic_list[topicname];
+    var topicids = []
+    var topicnames = []
+    logger.info(["topic_items:", topic_items])
+    for (var item in topic_items) {
+        console.log(item);
+        topicids.push(item.name);
+        topicnames.push(item.value);
 
-    async.map(keywords, function(item, callback){
+    }
+    async.map(topicids, function(topicid, callback){
 
-        samples.getStatsofSamples(item, function(status, msg){
+        samples.getStatsofSamples(topicid, function(status, msg){
             callback(null, msg);
         });
     }, function(err, results){
@@ -49,14 +62,15 @@ router.get('/', function (req, res, next) {
                 "name": categories[i],
                 "data": []
             });
-            for(var j=0; j<keywords.length; j++) {
+            for(var j=0; j<topicids.length; j++) {
                 statsData[i]["data"].push(results[j][i]);
             }
         };
         logger.info(statsData);
         res.render("overview",
                    {title: config.title,
-                    keywords: keywords,
+                    topicnames: topicnames,
+                    topic_list: topic_list,
                     statsData: statsData
                 });
     });
