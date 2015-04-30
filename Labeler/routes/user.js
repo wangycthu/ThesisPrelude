@@ -3,8 +3,9 @@
  */
 var config = require("../config");
 var sha1 = require('node-sha1');
-var MysqlClient = require("../models/mysql");
-var conn = MysqlClient.createConnection();
+// var MysqlClient = require("../models/mysql");
+// var conn = MysqlClient.createConnection();
+var mysql_conn = require("../models/mysqlv2");
 var logger = require("../models/logger");
 
 function User(_username, _email,  _password, isSuper) {

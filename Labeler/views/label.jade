@@ -29,6 +29,9 @@ html
             a.section(href="/check") check
             div.divider |
           div(class="active section") label
+          div.divider
+          div.section > 
+          div.section(id="topic_val", key=topicid, val=topicname)= topicname
           div.ui.right.labeled.icon.red.button(style={'position': 'absolute', 'right': '30px'})
             i.sign.out.icon
             label Sign out
@@ -44,7 +47,7 @@ html
               div.menu
                 div.header= topic_name
                 each keyword, id in keyword_list
-                   a.item(href="./index")= keyword
+                   a.item.topic_item(href="/label?topicid="+id+"&topicname="+keyword,  "id"=id, "name"=keyword)= keyword
                     
             
         // div.ui.segment
@@ -59,7 +62,12 @@ html
           $(document).ready(function () {
           
             $('.ui.dropdown').dropdown();
-          
+            $(".topic_item").click(function() {
+              // $.cookie("topicid", $(this).attr("id"));
+              window.location = $(location)[0].origin + "/label?topicid="
+              + $(this).attr("id")+"&keyword=" + $(this).attr("name");
+            });
+            
             $('.ui.tag.label').click(function () {
               $.cookie('keyword', $(this).attr('id'));
               window.location = $(location)[0].origin + '/label?kw=' + $(this).attr('id');
@@ -80,8 +88,8 @@ html
         div.row
           div.ui.ten.wide.column
             if rows.length
-              div.ui.threaded.comments(id=rows[0]['id'])
-                h3.ui.dividing.header= '关键词：' + keywords[keyword]
+              div.ui.threaded.comments(id=rows[0]['threadid'])
+                h3.ui.dividing.header= '关键词：' + topicname
                 each row in rows
                   div.comment(id=row['number'], style={'margin-left': 40 * row['depth'] + 'px'})
                     div.content
@@ -101,7 +109,7 @@ html
                               input(type="radio", name="sentiment" + row['number'], value="neutral")
                               label 0
                           div.field
-                            div.ui.radio.checkbox
+                            div.ui.radio.checkbox   
                               input(type="radio", name="sentiment" + row['number'], value="negative")
                               label -1
                 script.
@@ -136,7 +144,7 @@ html
                   i.right.arrow.icon
                   p Next
             else
-              h3.ui.dividing.header= '关键词：' + keywords[keyword]
+              h3.ui.dividing.header= '关键词：' + topicname
               div.ui.icon.warning.message
                 i.smile.icon
                 div.content
