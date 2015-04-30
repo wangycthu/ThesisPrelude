@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require("express-session");
-var logger = require("morgan");
+// var logger = require("morgan");
 var fs = require("fs");
 // All routes define
 var routes = require('./routes/index');
@@ -22,7 +22,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -39,10 +39,11 @@ app.use('/overview', overview);
 app.use('/check', check);
 app.use('/logout', logout);
 // catch 404 and forward to error handler
+/*
 app.use(function(err, req, res, next) {
     res.status(500).send("Some error happened!");
 });
-
+*/
 
 
 // error handlers

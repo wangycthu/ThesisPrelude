@@ -5,7 +5,9 @@
 function submit() {
 
     var threadID = $(".ui.threaded.comments").attr("id");
-    var _keyword = $(".ui.tag.green.label").attr("id");
+    // var _keyword = $(".ui.tag.green.label").attr("id");
+    var _topicid = $("#topic_val").attr("key");
+    var _topicname = $("#topic_val").attr("val");
     var _username = $("#username").text();
     var labelRecords = {};
     $(".comment").each(function(){
@@ -26,8 +28,8 @@ function submit() {
         type: "POST",
         dataType: 'json',
         data: {
-            "id": threadID,
-            "keyword": _keyword,
+            "threadid": threadID,
+            "topicid": _topicid,
             "username": _username,
             "labels": _labels,
             "trash": 0
@@ -76,17 +78,20 @@ $(function () {
 
 function trash() {
     var threadID = $(".ui.threaded.comments").attr("id");
-    var _keyword = $(".ui.tag.green.label").attr("id");
+    // var _keyword = $(".ui.tag.green.label").attr("id");
+    var _topicid = $("#topic_val").attr("key");
     var _username = $("#username").text();
 
     $.ajax({
         url: '/check',
         type: 'POST',
         dataType: 'json',
-        data: {'id': threadID, 'keyword': _keyword,
-               "username": _username, 'trash': 1},
+        data: { 'threadid': threadID, 
+                "topicid": _topicid,
+                "username": _username, 
+                'trash': 1},
         success: function (result) {
-            if (result.status == 0) {
+            if (result.status != 0) {
                 alert(result.msg);
             } else {
                 $('.ui.radio.checkbox').checkbox('disable');

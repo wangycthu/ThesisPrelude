@@ -24,7 +24,7 @@ html
                         text: 'source: ThesisLabeler'
                     },
                     xAxis: {
-                        categories: !{JSON.stringify(keywords)},
+                        categories: !{JSON.stringify(topicnames)},
                         title: {
                             text: null
                         }    
@@ -81,5 +81,12 @@ html
             a.section(href="/check") check
             div.divider |
             a.section(href="/label") label
+
+          div.ui.segment
+              each keyword_list, topic_name in topic_list
+                div.ui.dropdown.link.item(style="margin-left:10px;")
+                  a.text(href="/overview?topicname="+topic_name)= topic_name
+                  i.dropdown.icon
+                
         div#chart-container
 

@@ -149,7 +149,9 @@ validateForm.ready = function () {
         $.ajax({
           type: 'POST',
           url: '/register',
-          data: {'userName': username, 'email': email, 'password': password},
+          data: {   'userName': username, 
+                    'email': email, 
+                    'password': password},
           success: function (result) {
             if (result.status != 0) {
               alert(result.msg);

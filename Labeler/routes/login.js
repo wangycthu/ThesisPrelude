@@ -19,7 +19,7 @@ router.post('/', function (req, res) {
 
         if (status == 0) {
             // set user session
-            req.session.user = sha1("wyc" + msg["username"]);
+            req.session.user = sha1(config.secure_proxy + msg["username"]);
             req.session.username = msg["username"];
             req.session.secure_proxy = config.secure_proxy;
             logger.info(["cookie user", req.session.user]); // debug
