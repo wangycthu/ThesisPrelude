@@ -9,7 +9,7 @@ var samples = require("../models/samples");
 var config = require("../config");
 var logger = require("../models/logger");
 // var Thread = require("./thread");
-var thead = require("../models/thread");
+var thread = require("../models/thread");
 router.get('/', function(req, res, next){
 
 
