@@ -87,7 +87,7 @@ router.post("/", function(req, res){
         });
 
     } else {
-        logger.info(_id);
+        logger.info(threadid);
         logger.info(["trash"]);
         // var thread = new Thread(_id, _keyword);
         thread.trash(threadid, topicid, function (status, msg) {

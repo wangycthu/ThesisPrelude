@@ -231,7 +231,7 @@ var mysql_conn = (function() {
         });
     };
 
-    that.getSamplesByGroupIds = function(topicid, threadids, callback){
+    that.getSamplesByThreadIds = function(topicid, threadids, callback){
 
         pool.getConnection(function(err, connection){
 
@@ -253,7 +253,7 @@ var mysql_conn = (function() {
 
         pool.getConnection(function(err, connection){
 
-            var _query = "SELECT id FROM weibo "
+            var _query = "SELECT threadid FROM weibo "
                     + " WHERE ( topicid = ? "
                     + " AND (label1 IS NOT NULL) "
                     + "AND (label2 IS NOT NULL) "
@@ -320,7 +320,7 @@ var mysql_conn = (function() {
             var _query = "UPDATE weibo SET valid = ? "
                     + " WHERE topicid = ? "
                     + " AND threadid = ? AND number = ? ";
-            connection.query(_query, [topicid, valid, threadid, number],
+            connection.query(_query, [valid, topicid, threadid, number],
                              function(err, rows, fields){
                                  connection.release();
                                  if(err) {
@@ -381,7 +381,7 @@ var mysql_conn = (function() {
                     + " WHERE threadid = ? AND number = ? ";
 
             connection.query(_query, ["label"+order, label,
-                                      "user"+order, order,
+                                      "user"+order, username,
                                       "ifrelated"+order, ifrelated,
                                       threadid, number],
                              function(err, rows, fields){
@@ -440,7 +440,7 @@ var mysql_conn = (function() {
         getCountofSamplesByTrash: getCountofSamplesByTrash,
         getCountofParentsByUser: getCountofParentsByUser,
         getSamplesIDRandomlyByUser: getSamplesIDRandomlyByUser,
-        getSamplesByGroupIds: getSamplesByGroupIds,
+        getSamplesByThreadIds: getSamplesByThreadIds,
         getIdsByConflict: getIdsByConflict,
         getCountofIdsByConflict: getCountofIdsByConflict,
         findParentIdByChild: findParentIdByChild,

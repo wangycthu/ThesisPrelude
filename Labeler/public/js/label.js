@@ -26,7 +26,7 @@ function submit() {
                'username': _username,
                'labels': _labels,
                'trash': 0,
-               'if_related': _if_related
+               'ifrelated': _if_related
               },
         success: function (result) {
             if (result.status != 0) {

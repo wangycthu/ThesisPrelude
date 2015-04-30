@@ -54,7 +54,7 @@ var samples = (function(){
                 if(threadid === "no data") callback(null, "no data");
                 else if(threadid === "error") callback(null, "error");
                 else {
-                    mysql_conn.getSamplesByGroupIds(topicid, threadid, function(status, msg){
+                    mysql_conn.getSamplesByThreadIds(topicid, threadid, function(status, msg){
                         if(status != 0) callback(1, "error");
                         else callback(null, msg);
                     });
@@ -162,7 +162,7 @@ var samples = (function(){
             if (status != 0) callback(1, "error");
             else {
                 // the conflictIds are just group ids
-
+                logger.info(["conflictid: ", msg]);
                 // transfer
                 var conflictIds = [];
                 for(var i=0; i<msg.length; i++) {
@@ -180,7 +180,7 @@ var samples = (function(){
                     callback(0, []);
                 } else {
                     // get one parent Id every time
-                    mysql_conn.getSamplesByIds(topicid, parentIdsArray[0], function(status, rows){
+                    mysql_conn.getSamplesByThreadIds(topicid, parentIdsArray[0], function(status, rows){
                         if (status != 0) callback(1, "error");
                         else callback(0, rows);
                     });
