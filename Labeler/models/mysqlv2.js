@@ -259,6 +259,8 @@ var mysql_conn = (function() {
                     + " AND (label1 IS NOT NULL) "
                     + "AND (label2 IS NOT NULL) "
                     + " AND (label1 != label2 ) "
+                    + " AND (label1 != 2 ) "
+                    + " AND (label2 != 2 ) "
                     + " AND (valid IS NULL))";
             connection.query(_query, [topicid],
                              function(err, rows, fields){
