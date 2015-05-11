@@ -19,7 +19,7 @@ var mysql_conn = (function() {
 
     // DB operator
     that.getUserInfo = function(email, password, callback) {
-        
+
         pool.getConnection(function(err, connection){
 
             var _query = "SELECT * FROM UserInfo WHERE email = ? limit 1";
@@ -78,7 +78,7 @@ var mysql_conn = (function() {
 
         pool.getConnection(function(err, connection){
 
-            var _query = "INSERT INTO UserInfo (username, email, password, " 
+            var _query = "INSERT INTO UserInfo (username, email, password, "
                             + " isSuper, labelCount, validateCount ) "
                             + " values(?, ?, ?, ?, default, default)";
             connection.query( _query,
@@ -119,7 +119,8 @@ var mysql_conn = (function() {
             var _query = "SELECT COUNT(id) AS amount FROM weibo "
                     + " WHERE ( (topicid = ? ) "
                     + " AND (label1 IS NOT NULL) AND (label2 IS NOT NULL) "
-                    + " AND (label1 != label2 ) AND (valid IS NULL ))";
+                    + " AND (label1 != label2 ) AND (valid IS NULL ) "
+                    + " AND (label1 != 2) AND (label2 != 2) )";
             connection.query(_query, [topicid], function(err, rows, fields){
                 connection.release();
                 if(err) {
